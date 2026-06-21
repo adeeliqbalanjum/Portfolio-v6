@@ -4,8 +4,8 @@ import * as React from "react";
 import {
   ArrowRight,
   Code2,
-  FileText,
   Link2,
+  Map,
   Rocket,
   Search,
   ShieldCheck,
@@ -43,7 +43,7 @@ const timelineData: TimelineItem[] = [
     date: "02",
     content: "WordPress stack, plugins, sections, custom logic, responsive behavior, and editing needs are mapped.",
     category: "Build map",
-    icon: FileText,
+    icon: Map,
     relatedIds: [1, 3],
     status: "completed",
     energy: 88,
@@ -165,7 +165,7 @@ export function HomeProcessOrbitSection() {
     if (!autoRotate) return;
 
     const rotationTimer = window.setInterval(() => {
-      setRotationAngle((prev) => Number(((prev + 0.3) % 360).toFixed(3)));
+      setRotationAngle((prev) => Number(((prev + 0.24) % 360).toFixed(3)));
     }, 50);
 
     return () => window.clearInterval(rotationTimer);
@@ -173,12 +173,12 @@ export function HomeProcessOrbitSection() {
 
   const calculateNodePosition = (index: number, total: number) => {
     const angle = ((index / total) * 360 + rotationAngle) % 360;
-    const radius = 200;
+    const radius = 148;
     const radian = (angle * Math.PI) / 180;
     const x = radius * Math.cos(radian);
     const y = radius * Math.sin(radian);
     const zIndex = Math.round(100 + 50 * Math.cos(radian));
-    const opacity = Math.max(0.4, Math.min(1, 0.4 + 0.6 * ((1 + Math.sin(radian)) / 2)));
+    const opacity = Math.max(0.72, Math.min(1, 0.72 + 0.28 * ((1 + Math.sin(radian)) / 2)));
 
     return { x, y, zIndex, opacity };
   };
@@ -255,10 +255,10 @@ export function HomeProcessOrbitSection() {
                       <div
                         className={`home-process-node-glow ${isPulsing ? "is-pulsing" : ""}`}
                         style={{
-                          width: `${item.energy * 0.5 + 40}px`,
-                          height: `${item.energy * 0.5 + 40}px`,
-                          left: `-${(item.energy * 0.5 + 40 - 40) / 2}px`,
-                          top: `-${(item.energy * 0.5 + 40 - 40) / 2}px`,
+                          width: `${item.energy * 0.44 + 40}px`,
+                          height: `${item.energy * 0.44 + 40}px`,
+                          left: `-${(item.energy * 0.44 + 40 - 40) / 2}px`,
+                          top: `-${(item.energy * 0.44 + 40 - 40) / 2}px`,
                         }}
                       />
 
