@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 
 const basePath = process.env.NODE_ENV === "production" ? "/Portfolio-v6" : "";
@@ -224,19 +225,33 @@ function HomeHeroOptionB() {
 }
 
 export function HomeHeroOptionBMount() {
+  const pathname = usePathname();
   const [target, setTarget] = React.useState<HTMLElement | null>(null);
 
   React.useEffect(() => {
-    const hero = document.getElementById("home");
-    if (!hero) return;
+    setTarget(null);
 
-    hero.classList.add("home-hero-option-b-mounted");
-    setTarget(hero);
+    const mountHero = () => {
+      const hero = document.getElementById("home");
+      if (!hero) {
+        setTarget(null);
+        return null;
+      }
+
+      hero.classList.add("home-hero-option-b-mounted");
+      setTarget(hero);
+      return hero;
+    };
+
+    const hero = mountHero();
+    const timer = window.setTimeout(mountHero, 80);
 
     return () => {
-      hero.classList.remove("home-hero-option-b-mounted");
+      window.clearTimeout(timer);
+      hero?.classList.remove("home-hero-option-b-mounted");
+      setTarget(null);
     };
-  }, []);
+  }, [pathname]);
 
   if (!target) return null;
 
