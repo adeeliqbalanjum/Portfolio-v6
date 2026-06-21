@@ -21,6 +21,7 @@ import './home-stat-cards-option-a.css';
 import './portfolio-performance.css';
 import './site-consistency-fixes.css';
 import { ButtonFillController } from './components/ButtonFillController';
+import { HomeCleanupMount } from './components/HomeCleanupMount';
 import { SiteFooter } from './components/SiteFooter';
 import { SiteHeader } from './components/SiteHeader';
 import { HomeBuildStackMount } from './components/HomeBuildStackMount';
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='en'>
       <body>
         <ButtonFillController />
+        <HomeCleanupMount />
         <ScrollProgressBar type='bar' color='#070707' strokeSize={2} showPercentage={false} />
         <SiteHeader />
         {children}
