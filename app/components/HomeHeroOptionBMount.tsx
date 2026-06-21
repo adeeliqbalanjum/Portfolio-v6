@@ -4,7 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { motion } from "motion/react";
 
-const basePath = process.env.NODE_ENV === "production" ? "/adeelatwork" : "";
+const basePath = process.env.NODE_ENV === "production" ? "/Portfolio-v6" : "";
 const portraitDataUrl = "https://avatars.githubusercontent.com/u/178131381?v=4";
 
 type HeroCard = {
