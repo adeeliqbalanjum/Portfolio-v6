@@ -21,8 +21,8 @@ const timelineData: TimelineItem[] = [
     id: 1,
     num: "01",
     title: "Understand",
-    date: "Step 01",
-    content: "Clarify the goal, business model, page structure, features, references, and conversion path.",
+    date: "Client brief",
+    content: "Goals, pages, features, references, budget, and conversion path are clarified first.",
     icon: Calendar,
     relatedIds: [2],
     status: "completed",
@@ -32,8 +32,8 @@ const timelineData: TimelineItem[] = [
     id: 2,
     num: "02",
     title: "Plan",
-    date: "Step 02",
-    content: "Map the WordPress stack, plugins, custom logic, responsiveness, and editing needs.",
+    date: "Build map",
+    content: "WordPress stack, plugins, sections, custom logic, responsiveness, and editing needs are mapped.",
     icon: FileText,
     relatedIds: [1, 3],
     status: "completed",
@@ -43,8 +43,8 @@ const timelineData: TimelineItem[] = [
     id: 3,
     num: "03",
     title: "Build",
-    date: "Step 03",
-    content: "Create the UI, templates, forms, animations, integrations, and business functionality.",
+    date: "Development",
+    content: "UI, templates, forms, WooCommerce flows, animations, integrations, and business logic are built.",
     icon: Code2,
     relatedIds: [2, 4],
     status: "in-progress",
@@ -54,8 +54,8 @@ const timelineData: TimelineItem[] = [
     id: 4,
     num: "04",
     title: "Polish",
-    date: "Step 04",
-    content: "Test mobile, speed, forms, links, browser behavior, and final handover details.",
+    date: "QA check",
+    content: "Mobile, speed, forms, links, checkout, browser behavior, and final details are tested.",
     icon: MonitorCheck,
     relatedIds: [3, 5],
     status: "pending",
@@ -65,8 +65,8 @@ const timelineData: TimelineItem[] = [
     id: 5,
     num: "05",
     title: "Launch",
-    date: "Step 05",
-    content: "Deploy the final site and confirm the build is editable, fast, and responsive after launch.",
+    date: "Go live",
+    content: "The site is deployed, verified live, and handed over as an editable WordPress system.",
     icon: Rocket,
     relatedIds: [4],
     status: "pending",
@@ -75,9 +75,9 @@ const timelineData: TimelineItem[] = [
 ];
 
 function getStatusLabel(status: TimelineItem["status"]) {
-  if (status === "completed") return "Complete";
-  if (status === "in-progress") return "In progress";
-  return "Pending";
+  if (status === "completed") return "Ready";
+  if (status === "in-progress") return "Active";
+  return "Next";
 }
 
 function getStatusClass(status: TimelineItem["status"]) {
@@ -92,7 +92,7 @@ export function HomeProcessOrbitSection() {
   const [expandedItems, setExpandedItems] = React.useState<Record<number, boolean>>({});
   const [activeNodeId, setActiveNodeId] = React.useState<number | null>(null);
   const [rotationAngle, setRotationAngle] = React.useState(0);
-  const [autoRotate, setAutoRotate] = React.useState(true);
+  const [autoRotate, setAutoRotate] = React.useState(false);
   const [pulseEffect, setPulseEffect] = React.useState<Record<number, boolean>>({});
 
   const { scrollYProgress } = useScroll({
@@ -105,7 +105,7 @@ export function HomeProcessOrbitSection() {
     if (!autoRotate) return;
 
     const rotationTimer = window.setInterval(() => {
-      setRotationAngle((prev) => Number(((prev + 0.22) % 360).toFixed(3)));
+      setRotationAngle((prev) => Number(((prev + 0.18) % 360).toFixed(3)));
     }, 50);
 
     return () => window.clearInterval(rotationTimer);
@@ -142,7 +142,7 @@ export function HomeProcessOrbitSection() {
         centerViewOnNode(id);
       } else {
         setActiveNodeId(null);
-        setAutoRotate(true);
+        setAutoRotate(false);
         setPulseEffect({});
       }
 
@@ -152,12 +152,12 @@ export function HomeProcessOrbitSection() {
 
   const calculateNodePosition = (index: number, total: number) => {
     const angle = ((index / total) * 360 + rotationAngle) % 360;
-    const radius = 232;
+    const radius = 228;
     const radian = (angle * Math.PI) / 180;
     const x = radius * Math.cos(radian);
     const y = radius * Math.sin(radian);
     const zIndex = Math.round(100 + 50 * Math.cos(radian));
-    const opacity = Math.max(0.5, Math.min(1, 0.5 + 0.5 * ((1 + Math.sin(radian)) / 2)));
+    const opacity = Math.max(0.78, Math.min(1, 0.78 + 0.22 * ((1 + Math.sin(radian)) / 2)));
     return { x, y, zIndex, opacity };
   };
 
@@ -171,7 +171,8 @@ export function HomeProcessOrbitSection() {
       setExpandedItems({});
       setActiveNodeId(null);
       setPulseEffect({});
-      setAutoRotate(true);
+      setAutoRotate(false);
+      setRotationAngle(0);
     }
   };
 
@@ -197,9 +198,9 @@ export function HomeProcessOrbitSection() {
             Every website build moves around one core goal: a fast, editable, responsive WordPress system that clients can actually use after launch.
           </p>
           <div className="home-process-mini-list">
-            <span>Scroll linked</span>
             <span>Clear workflow</span>
             <span>Client-ready handover</span>
+            <span>Click each step</span>
           </div>
         </motion.div>
 
@@ -238,18 +239,22 @@ export function HomeProcessOrbitSection() {
                 >
                   <div
                     className={`home-process-node-pulse ${isPulsing ? "is-pulsing" : ""}`}
-                    style={{ width: `${item.energy * 0.52 + 42}px`, height: `${item.energy * 0.52 + 42}px` }}
+                    style={{ width: `${item.energy * 0.42 + 52}px`, height: `${item.energy * 0.42 + 52}px` }}
                   />
 
                   <button
-                    className={`home-process-node ${isExpanded ? "is-expanded" : ""} ${isRelated ? "is-related" : ""}`}
+                    className={`home-process-step-card ${isExpanded ? "is-expanded" : ""} ${isRelated ? "is-related" : ""}`}
                     type="button"
                     aria-label={`View ${item.title} process step`}
                   >
-                    <Icon size={17} strokeWidth={2.4} />
+                    <span className="home-process-step-top">
+                      <span className="home-process-step-icon"><Icon size={17} strokeWidth={2.4} /></span>
+                      <span className="home-process-step-num">{item.num}</span>
+                    </span>
+                    <span className="home-process-step-label">{item.date}</span>
+                    <strong>{item.title}</strong>
+                    <em>{item.content}</em>
                   </button>
-
-                  <div className={`home-process-node-label ${isExpanded ? "is-expanded" : ""}`}>{item.title}</div>
 
                   {isExpanded && (
                     <article className="home-process-expanded-card">
@@ -263,7 +268,7 @@ export function HomeProcessOrbitSection() {
                       <div className="home-process-energy">
                         <div>
                           <Zap size={12} />
-                          <span>Focus level</span>
+                          <span>Client clarity</span>
                         </div>
                         <strong>{item.energy}%</strong>
                       </div>
