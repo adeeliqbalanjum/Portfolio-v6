@@ -15,10 +15,16 @@
   object-fit: cover !important;
 }
 
-/* Remove the full WordPress capabilities / feature scroll section from homepage. */
+/* Remove the old homepage feature/demo blocks completely. */
 #features,
 #features > *,
-.feature-scroll {
+.feature-scroll,
+#plugin-lab,
+#plugin-lab > *,
+#plugin-lab .flow-inner,
+#plugin-lab .section-head,
+#plugin-lab .lab-grid,
+#plugin-lab .lab-card {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -26,7 +32,10 @@
   max-height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
+  border: 0 !important;
   overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Make the original static homepage hero match the mounted real hero during page load/navigation. */
