@@ -15,6 +15,20 @@
   object-fit: cover !important;
 }
 
+/* Remove the full WordPress capabilities / feature scroll section from homepage. */
+#features,
+#features > *,
+.feature-scroll {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
 /* Make the original static homepage hero match the mounted real hero during page load/navigation. */
 .hero#home {
   background:
