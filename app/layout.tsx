@@ -19,6 +19,7 @@ import './home-digitalists-work.css';
 import './scrollbar-fix.css';
 import './home-stat-cards-option-a.css';
 import './portfolio-performance.css';
+import './site-consistency-fixes.css';
 import { ButtonFillController } from './components/ButtonFillController';
 import { SiteFooter } from './components/SiteFooter';
 import { SiteHeader } from './components/SiteHeader';
