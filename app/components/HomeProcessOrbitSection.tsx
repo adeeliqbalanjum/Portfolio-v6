@@ -1,15 +1,24 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Calendar, Code2, FileText, Link2, MonitorCheck, Rocket, Zap } from "lucide-react";
-import { motion, useScroll, useTransform } from "motion/react";
+import {
+  ArrowRight,
+  Code2,
+  FileText,
+  Link2,
+  MonitorCheck,
+  Rocket,
+  Search,
+  ShieldCheck,
+  Zap,
+} from "lucide-react";
 
 type TimelineItem = {
   id: number;
-  num: string;
   title: string;
   date: string;
   content: string;
+  category: string;
   icon: React.ElementType;
   relatedIds: number[];
   status: "completed" | "in-progress" | "pending";
@@ -19,21 +28,21 @@ type TimelineItem = {
 const timelineData: TimelineItem[] = [
   {
     id: 1,
-    num: "01",
     title: "Understand",
-    date: "Client brief",
-    content: "Goals, pages, features, references, budget, and conversion path are clarified first.",
-    icon: Calendar,
+    date: "01",
+    content: "Goals, pages, features, references, budget, timeline, and conversion path are clarified first.",
+    category: "Client brief",
+    icon: Search,
     relatedIds: [2],
     status: "completed",
     energy: 100,
   },
   {
     id: 2,
-    num: "02",
     title: "Plan",
-    date: "Build map",
-    content: "WordPress stack, plugins, sections, custom logic, responsiveness, and editing needs are mapped.",
+    date: "02",
+    content: "WordPress stack, plugins, sections, custom logic, responsive behavior, and editing needs are mapped.",
+    category: "Build map",
     icon: FileText,
     relatedIds: [1, 3],
     status: "completed",
@@ -41,43 +50,43 @@ const timelineData: TimelineItem[] = [
   },
   {
     id: 3,
-    num: "03",
     title: "Build",
-    date: "Development",
-    content: "UI, templates, forms, WooCommerce flows, animations, integrations, and business logic are built.",
+    date: "03",
+    content: "UI, templates, forms, WooCommerce flows, animations, integrations, and business logic are built cleanly.",
+    category: "Development",
     icon: Code2,
     relatedIds: [2, 4],
     status: "in-progress",
-    energy: 66,
+    energy: 72,
   },
   {
     id: 4,
-    num: "04",
     title: "Polish",
-    date: "QA check",
-    content: "Mobile, speed, forms, links, checkout, browser behavior, and final details are tested.",
-    icon: MonitorCheck,
+    date: "04",
+    content: "Mobile, speed, forms, links, checkout, browser behavior, and final details are tested before handover.",
+    category: "QA check",
+    icon: ShieldCheck,
     relatedIds: [3, 5],
     status: "pending",
-    energy: 42,
+    energy: 56,
   },
   {
     id: 5,
-    num: "05",
     title: "Launch",
-    date: "Go live",
+    date: "05",
     content: "The site is deployed, verified live, and handed over as an editable WordPress system.",
+    category: "Go live",
     icon: Rocket,
     relatedIds: [4],
     status: "pending",
-    energy: 24,
+    energy: 40,
   },
 ];
 
 function getStatusLabel(status: TimelineItem["status"]) {
-  if (status === "completed") return "Ready";
-  if (status === "in-progress") return "Active";
-  return "Next";
+  if (status === "completed") return "COMPLETE";
+  if (status === "in-progress") return "IN PROGRESS";
+  return "PENDING";
 }
 
 function getStatusClass(status: TimelineItem["status"]) {
@@ -87,46 +96,44 @@ function getStatusClass(status: TimelineItem["status"]) {
 }
 
 export function HomeProcessOrbitSection() {
-  const ref = React.useRef<HTMLElement>(null);
-  const orbitRef = React.useRef<HTMLDivElement>(null);
   const [expandedItems, setExpandedItems] = React.useState<Record<number, boolean>>({});
-  const [activeNodeId, setActiveNodeId] = React.useState<number | null>(null);
-  const [rotationAngle, setRotationAngle] = React.useState(0);
-  const [autoRotate, setAutoRotate] = React.useState(false);
+  const [rotationAngle, setRotationAngle] = React.useState<number>(0);
+  const [autoRotate, setAutoRotate] = React.useState<boolean>(true);
   const [pulseEffect, setPulseEffect] = React.useState<Record<number, boolean>>({});
+  const [activeNodeId, setActiveNodeId] = React.useState<number | null>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const orbitRef = React.useRef<HTMLDivElement>(null);
+  const nodeRefs = React.useRef<Record<number, HTMLDivElement | null>>({});
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 78%", "end 18%"],
-  });
-  const scale = useTransform(scrollYProgress, [0, 0.18, 0.82, 1], [0.94, 1, 1, 0.96]);
+  const handleContainerClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === containerRef.current || event.target === orbitRef.current) {
+      setExpandedItems({});
+      setActiveNodeId(null);
+      setPulseEffect({});
+      setAutoRotate(true);
+    }
+  };
 
-  React.useEffect(() => {
-    if (!autoRotate) return;
-
-    const rotationTimer = window.setInterval(() => {
-      setRotationAngle((prev) => Number(((prev + 0.18) % 360).toFixed(3)));
-    }, 50);
-
-    return () => window.clearInterval(rotationTimer);
-  }, [autoRotate]);
-
-  const getRelatedItems = React.useCallback((itemId: number) => {
+  const getRelatedItems = React.useCallback((itemId: number): number[] => {
     const currentItem = timelineData.find((item) => item.id === itemId);
     return currentItem ? currentItem.relatedIds : [];
   }, []);
 
   const centerViewOnNode = React.useCallback((nodeId: number) => {
     const nodeIndex = timelineData.findIndex((item) => item.id === nodeId);
-    const targetAngle = (nodeIndex / timelineData.length) * 360;
+    const totalNodes = timelineData.length;
+    const targetAngle = (nodeIndex / totalNodes) * 360;
     setRotationAngle(270 - targetAngle);
   }, []);
 
   const toggleItem = React.useCallback((id: number) => {
     setExpandedItems((prev) => {
-      const nextState: Record<number, boolean> = {};
-      Object.keys(prev).forEach((key) => {
-        if (Number(key) !== id) nextState[Number(key)] = false;
+      const nextState = { ...prev };
+
+      Object.keys(nextState).forEach((key) => {
+        if (Number(key) !== id) {
+          nextState[Number(key)] = false;
+        }
       });
 
       nextState[id] = !prev[id];
@@ -134,15 +141,17 @@ export function HomeProcessOrbitSection() {
       if (!prev[id]) {
         setActiveNodeId(id);
         setAutoRotate(false);
-        const nextPulse: Record<number, boolean> = {};
-        getRelatedItems(id).forEach((relId) => {
-          nextPulse[relId] = true;
+
+        const relatedItems = getRelatedItems(id);
+        const nextPulseEffect: Record<number, boolean> = {};
+        relatedItems.forEach((relatedId) => {
+          nextPulseEffect[relatedId] = true;
         });
-        setPulseEffect(nextPulse);
+        setPulseEffect(nextPulseEffect);
         centerViewOnNode(id);
       } else {
         setActiveNodeId(null);
-        setAutoRotate(false);
+        setAutoRotate(true);
         setPulseEffect({});
       }
 
@@ -150,75 +159,54 @@ export function HomeProcessOrbitSection() {
     });
   }, [centerViewOnNode, getRelatedItems]);
 
+  React.useEffect(() => {
+    if (!autoRotate) return;
+
+    const rotationTimer = window.setInterval(() => {
+      setRotationAngle((prev) => Number(((prev + 0.3) % 360).toFixed(3)));
+    }, 50);
+
+    return () => window.clearInterval(rotationTimer);
+  }, [autoRotate]);
+
   const calculateNodePosition = (index: number, total: number) => {
     const angle = ((index / total) * 360 + rotationAngle) % 360;
-    const radius = 228;
+    const radius = 200;
     const radian = (angle * Math.PI) / 180;
     const x = radius * Math.cos(radian);
     const y = radius * Math.sin(radian);
     const zIndex = Math.round(100 + 50 * Math.cos(radian));
-    const opacity = Math.max(0.78, Math.min(1, 0.78 + 0.22 * ((1 + Math.sin(radian)) / 2)));
-    return { x, y, zIndex, opacity };
+    const opacity = Math.max(0.4, Math.min(1, 0.4 + 0.6 * ((1 + Math.sin(radian)) / 2)));
+
+    return { x, y, angle, zIndex, opacity };
   };
 
-  const isRelatedToActive = (itemId: number) => {
+  const isRelatedToActive = (itemId: number): boolean => {
     if (!activeNodeId) return false;
-    return getRelatedItems(activeNodeId).includes(itemId);
-  };
-
-  const resetOrbit = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === orbitRef.current) {
-      setExpandedItems({});
-      setActiveNodeId(null);
-      setPulseEffect({});
-      setAutoRotate(false);
-      setRotationAngle(0);
-    }
+    const relatedItems = getRelatedItems(activeNodeId);
+    return relatedItems.includes(itemId);
   };
 
   return (
-    <section ref={ref} className="home-process-orbit" aria-label="Process">
-      <div className="home-process-bg" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </div>
+    <section className="home-process-orbit" aria-label="Process">
+      <div className="home-process-terminal" ref={containerRef} onClick={handleContainerClick}>
+        <div className="home-process-terminal-inner">
+          <div
+            className="home-process-orbit-field"
+            ref={orbitRef}
+            style={{ perspective: "1000px" }}
+          >
+            <div className="home-process-center-node">
+              <div className="home-process-center-ping home-process-center-ping-one" />
+              <div className="home-process-center-ping home-process-center-ping-two" />
+              <div className="home-process-center-core" />
+            </div>
 
-      <div className="home-process-shell">
-        <motion.div
-          className="home-process-copy"
-          initial={{ y: 32, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: false, amount: 0.45 }}
-          transition={{ duration: 0.65, ease: [0.2, 0.8, 0.2, 1] }}
-        >
-          <div className="eyebrow">Process</div>
-          <h2>How I move from idea to polished launch</h2>
-          <p>
-            Every website build moves around one core goal: a fast, editable, responsive WordPress system that clients can actually use after launch.
-          </p>
-          <div className="home-process-mini-list">
-            <span>Clear workflow</span>
-            <span>Client-ready handover</span>
-            <span>Click each step</span>
-          </div>
-        </motion.div>
-
-        <motion.div className="home-process-stage" style={{ scale }}>
-          <div className="home-process-core">
-            <span>Launch</span>
-            <strong>WordPress system</strong>
-            <small>Editable · Fast · Responsive</small>
-          </div>
-
-          <div className="home-process-orbit-wheel" ref={orbitRef} onClick={resetOrbit}>
-            <div className="home-process-ring home-process-ring-one" />
-            <div className="home-process-ring home-process-ring-two" />
-            <div className="home-process-ring home-process-ring-three" />
+            <div className="home-process-orbit-ring" />
 
             {timelineData.map((item, index) => {
               const position = calculateNodePosition(index, timelineData.length);
-              const isExpanded = !!expandedItems[item.id];
+              const isExpanded = expandedItems[item.id];
               const isRelated = isRelatedToActive(item.id);
               const isPulsing = pulseEffect[item.id];
               const Icon = item.icon;
@@ -226,10 +214,13 @@ export function HomeProcessOrbitSection() {
               return (
                 <div
                   key={item.id}
-                  className={`home-process-node-wrap ${isExpanded ? "is-expanded" : ""}`}
+                  ref={(element) => {
+                    nodeRefs.current[item.id] = element;
+                  }}
+                  className="home-process-node-wrap"
                   style={{
                     transform: `translate(${position.x}px, ${position.y}px)`,
-                    zIndex: isExpanded ? 220 : position.zIndex,
+                    zIndex: isExpanded ? 200 : position.zIndex,
                     opacity: isExpanded ? 1 : position.opacity,
                   }}
                   onClick={(event) => {
@@ -238,51 +229,63 @@ export function HomeProcessOrbitSection() {
                   }}
                 >
                   <div
-                    className={`home-process-node-pulse ${isPulsing ? "is-pulsing" : ""}`}
-                    style={{ width: `${item.energy * 0.42 + 52}px`, height: `${item.energy * 0.42 + 52}px` }}
+                    className={`home-process-node-glow ${isPulsing ? "is-pulsing" : ""}`}
+                    style={{
+                      width: `${item.energy * 0.5 + 40}px`,
+                      height: `${item.energy * 0.5 + 40}px`,
+                      left: `-${(item.energy * 0.5 + 40 - 40) / 2}px`,
+                      top: `-${(item.energy * 0.5 + 40 - 40) / 2}px`,
+                    }}
                   />
 
                   <button
-                    className={`home-process-step-card ${isExpanded ? "is-expanded" : ""} ${isRelated ? "is-related" : ""}`}
                     type="button"
-                    aria-label={`View ${item.title} process step`}
+                    className={`home-process-node ${isExpanded ? "is-expanded" : ""} ${isRelated ? "is-related" : ""}`}
+                    aria-label={`Open ${item.title} process step`}
                   >
-                    <span className="home-process-step-top">
-                      <span className="home-process-step-icon"><Icon size={17} strokeWidth={2.4} /></span>
-                      <span className="home-process-step-num">{item.num}</span>
-                    </span>
-                    <span className="home-process-step-label">{item.date}</span>
-                    <strong>{item.title}</strong>
-                    <em>{item.content}</em>
+                    <Icon size={16} />
                   </button>
+
+                  <div className={`home-process-node-label ${isExpanded ? "is-expanded" : ""}`}>
+                    {item.title}
+                  </div>
 
                   {isExpanded && (
                     <article className="home-process-expanded-card">
-                      <div className="home-process-card-arrow" />
-                      <div className="home-process-expanded-top">
-                        <span className={`home-process-status ${getStatusClass(item.status)}`}>{getStatusLabel(item.status)}</span>
+                      <div className="home-process-card-connector" />
+                      <div className="home-process-expanded-header">
+                        <span className={`home-process-status ${getStatusClass(item.status)}`}>
+                          {getStatusLabel(item.status)}
+                        </span>
                         <span className="home-process-date">{item.date}</span>
                       </div>
+
                       <h3>{item.title}</h3>
                       <p>{item.content}</p>
+
                       <div className="home-process-energy">
                         <div>
-                          <Zap size={12} />
-                          <span>Client clarity</span>
+                          <Zap size={10} />
+                          <span>Energy Level</span>
                         </div>
                         <strong>{item.energy}%</strong>
                       </div>
-                      <div className="home-process-energy-bar"><span style={{ width: `${item.energy}%` }} /></div>
+
+                      <div className="home-process-energy-bar">
+                        <span style={{ width: `${item.energy}%` }} />
+                      </div>
+
                       {item.relatedIds.length > 0 && (
                         <div className="home-process-related">
                           <div className="home-process-related-title">
-                            <Link2 size={12} />
-                            <span>Connected steps</span>
+                            <Link2 size={10} />
+                            <span>Connected Nodes</span>
                           </div>
                           <div className="home-process-related-buttons">
                             {item.relatedIds.map((relatedId) => {
                               const relatedItem = timelineData.find((timelineItem) => timelineItem.id === relatedId);
                               if (!relatedItem) return null;
+
                               return (
                                 <button
                                   key={relatedId}
@@ -293,7 +296,7 @@ export function HomeProcessOrbitSection() {
                                   }}
                                 >
                                   {relatedItem.title}
-                                  <ArrowRight size={10} />
+                                  <ArrowRight size={8} />
                                 </button>
                               );
                             })}
@@ -306,7 +309,7 @@ export function HomeProcessOrbitSection() {
               );
             })}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
