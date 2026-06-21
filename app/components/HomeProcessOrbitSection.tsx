@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Calendar, Code2, FileText, Link2, MonitorCheck, Rocket, Zap } from "lucide-react";
+import { ArrowRight, Link2, Map, Rocket, Search, ShieldCheck, Wrench, Zap } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
 
 type TimelineItem = {
@@ -23,7 +23,7 @@ const timelineData: TimelineItem[] = [
     title: "Understand",
     date: "Client brief",
     content: "Goals, pages, features, references, budget, and conversion path are clarified first.",
-    icon: Calendar,
+    icon: Search,
     relatedIds: [2],
     status: "completed",
     energy: 100,
@@ -34,7 +34,7 @@ const timelineData: TimelineItem[] = [
     title: "Plan",
     date: "Build map",
     content: "WordPress stack, plugins, sections, custom logic, responsiveness, and editing needs are mapped.",
-    icon: FileText,
+    icon: Map,
     relatedIds: [1, 3],
     status: "completed",
     energy: 88,
@@ -45,7 +45,7 @@ const timelineData: TimelineItem[] = [
     title: "Build",
     date: "Development",
     content: "UI, templates, forms, WooCommerce flows, animations, integrations, and business logic are built.",
-    icon: Code2,
+    icon: Wrench,
     relatedIds: [2, 4],
     status: "in-progress",
     energy: 66,
@@ -56,7 +56,7 @@ const timelineData: TimelineItem[] = [
     title: "Polish",
     date: "QA check",
     content: "Mobile, speed, forms, links, checkout, browser behavior, and final details are tested.",
-    icon: MonitorCheck,
+    icon: ShieldCheck,
     relatedIds: [3, 5],
     status: "pending",
     energy: 42,
@@ -226,7 +226,7 @@ export function HomeProcessOrbitSection() {
               return (
                 <div
                   key={item.id}
-                  className={`home-process-node-wrap ${isExpanded ? "is-expanded" : ""}`}
+                  className={`home-process-node-wrap is-step-${item.id} ${isExpanded ? "is-expanded" : ""}`}
                   style={{
                     transform: `translate(${position.x}px, ${position.y}px)`,
                     zIndex: isExpanded ? 220 : position.zIndex,
@@ -248,7 +248,7 @@ export function HomeProcessOrbitSection() {
                     aria-label={`View ${item.title} process step`}
                   >
                     <span className="home-process-step-top">
-                      <span className="home-process-step-icon"><Icon size={17} strokeWidth={2.4} /></span>
+                      <span className="home-process-step-icon"><Icon size={18} strokeWidth={2.5} /></span>
                       <span className="home-process-step-num">{item.num}</span>
                     </span>
                     <span className="home-process-step-label">{item.date}</span>
