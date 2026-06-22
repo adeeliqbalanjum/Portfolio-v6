@@ -75,15 +75,19 @@ export default function ServicesCarousel() {
 
         const getScrollDistance = () => Math.max(0, track.scrollWidth - pin.clientWidth);
 
+        gsap.set(track, { x: 0 });
+
         const tween = gsap.to(track, {
           x: () => -getScrollDistance(),
           ease: "none",
           scrollTrigger: {
+            id: "services-horizontal-scroll",
             trigger: pin,
-            start: "top top",
-            end: () => `+=${getScrollDistance() + window.innerHeight * 0.45}`,
-            scrub: 0.8,
+            start: "top 92px",
+            end: () => `+=${getScrollDistance()}`,
+            scrub: 0.75,
             pin: true,
+            pinSpacing: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
@@ -94,6 +98,7 @@ export default function ServicesCarousel() {
         return () => {
           tween.scrollTrigger?.kill();
           tween.kill();
+          gsap.set(track, { clearProps: "transform" });
         };
       });
 
