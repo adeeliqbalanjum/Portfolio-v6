@@ -1,7 +1,10 @@
 .serviceShell {
   position: relative;
   overflow: visible;
+  width: 100vw;
   margin-top: 36px;
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 
 .serviceShell::before {
@@ -24,18 +27,40 @@
 
 .serviceHead,
 .serviceFeature,
-.serviceStack,
+.servicePin,
+.serviceTrack,
 .serviceMobileHint {
   position: relative;
   z-index: 1;
 }
 
+.servicePin {
+  width: 100vw;
+  height: 100vh;
+  min-height: 720px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.serviceTrack {
+  display: flex;
+  align-items: stretch;
+  gap: 34px;
+  width: max-content;
+  padding: 0 max(22px, calc((100vw - 1040px) / 2));
+  will-change: transform;
+}
+
+.serviceSlide {
+  flex: 0 0 min(1040px, calc(100vw - 44px));
+}
+
 .serviceFeature {
-  margin-top: 0;
   display: grid;
   grid-template-columns: 1.18fr .82fr;
   gap: 18px;
-  min-height: 430px;
+  min-height: min(650px, calc(100vh - 150px));
   padding: 32px;
   border-radius: 34px;
   overflow: hidden;
@@ -151,17 +176,8 @@
   font-size: 12px;
 }
 
-.serviceStack {
-  display: grid;
-  gap: 96px;
-  margin-top: 96px;
-  padding-bottom: 130px;
-}
-
 .serviceCard {
-  position: sticky;
-  top: 96px;
-  min-height: 540px;
+  min-height: min(650px, calc(100vh - 150px));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -178,12 +194,6 @@
   backdrop-filter: blur(16px);
   isolation: isolate;
 }
-
-.serviceCard:nth-child(1) { z-index: 1; }
-.serviceCard:nth-child(2) { z-index: 2; }
-.serviceCard:nth-child(3) { z-index: 3; }
-.serviceCard:nth-child(4) { z-index: 4; }
-.serviceCard:nth-child(5) { z-index: 5; }
 
 .serviceCard::before {
   content: "";
@@ -338,6 +348,32 @@
 }
 
 @media (max-width: 900px) {
+  .serviceShell {
+    width: auto;
+    margin-left: 0;
+    transform: none;
+  }
+
+  .servicePin {
+    width: auto;
+    height: auto;
+    min-height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .serviceTrack {
+    display: grid;
+    gap: 22px;
+    width: auto;
+    padding: 0;
+    transform: none !important;
+  }
+
+  .serviceSlide {
+    flex-basis: auto;
+  }
+
   .serviceFeature {
     grid-template-columns: 1fr;
     min-height: auto;
@@ -351,15 +387,7 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .serviceStack {
-    gap: 22px;
-    margin-top: 42px;
-    padding-bottom: 20px;
-  }
-
   .serviceCard {
-    position: relative;
-    top: auto;
     min-height: auto;
     padding: 26px;
   }
