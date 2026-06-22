@@ -87,12 +87,6 @@ const services = [
   },
 ];
 
-const experience = [
-  ["Current", "WordPress Developer", "Full-time WordPress development work with international client projects, QA, Elementor, CPTs, plugin fixes, and speed work."],
-  ["50+", "Delivered Builds", "Business websites, healthcare sites, booking platforms, WooCommerce stores, legal websites, and consultancy pages."],
-  ["Stack", "WordPress System Builder", "Elementor Pro, WooCommerce, ACF, CPT UI, PHP snippets, CSS, JS, GSAP, forms, search/filter, and custom workflows."],
-];
-
 const processSteps = [
   ["01", "Understand", "I clarify the client goal, business model, page structure, features, references, and conversion path."],
   ["02", "Plan", "I map the sections, WordPress stack, required plugins, custom logic, responsiveness, and editing needs."],
@@ -452,29 +446,6 @@ export default function Home() {
                 <h3>{service.title}</h3>
                 <p>{service.copy}</p>
                 <span>{service.deliverable}</span>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── ABOUT / EXPERIENCE ── */}
-      <section className="section grey flow-section portfolio-section" id="experience">
-        <div className="container flow-inner experience-wrap">
-          <div className="section-head section-head--left scroll-reveal">
-            <div className="eyebrow">About / Experience</div>
-            <h2>WordPress work with client delivery in mind</h2>
-            <p>I focus on editable builds, custom business logic, performance, and clear handover so the final site is useful after launch.</p>
-          </div>
-
-          <div className="experience-list">
-            {experience.map(([label, title, copy]) => (
-              <article className="experience-row scroll-reveal" key={title}>
-                <strong>{label}</strong>
-                <div>
-                  <h3>{title}</h3>
-                  <p>{copy}</p>
-                </div>
               </article>
             ))}
           </div>
