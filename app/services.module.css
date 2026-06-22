@@ -3,8 +3,8 @@
   overflow: hidden;
   isolation: isolate;
   width: 100vw;
-  height: calc(var(--service-scroll-distance, 0px) + 100svh);
-  min-height: 100svh;
+  height: 420vh;
+  min-height: 3200px;
   margin-top: 36px;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -21,7 +21,7 @@
   content: "";
   position: absolute;
   left: 50%;
-  top: 34%;
+  top: 26%;
   width: min(980px, 94vw);
   height: min(980px, 94vw);
   border-radius: 50%;
@@ -48,7 +48,7 @@
   position: sticky;
   top: 92px;
   width: 100vw;
-  height: calc(100svh - 92px);
+  height: calc(100vh - 92px);
   min-height: 620px;
   display: flex;
   align-items: center;
@@ -72,7 +72,7 @@
   display: grid;
   grid-template-columns: 1.18fr .82fr;
   gap: 18px;
-  min-height: min(560px, calc(100svh - 190px));
+  min-height: min(560px, calc(100vh - 190px));
   padding: 30px;
   border-radius: 34px;
   overflow: hidden;
@@ -189,7 +189,7 @@
 }
 
 .serviceCard {
-  min-height: min(560px, calc(100svh - 190px));
+  min-height: min(560px, calc(100vh - 190px));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
