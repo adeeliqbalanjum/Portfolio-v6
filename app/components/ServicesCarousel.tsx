@@ -56,7 +56,8 @@ export default function ServicesCarousel() {
       <style>{`
         #services {
           position: relative;
-          overflow: clip;
+          overflow-x: clip;
+          overflow-y: visible;
           isolation: isolate;
           background:
             radial-gradient(circle at 0% 0%, rgba(125, 211, 252, .30), transparent 42%),
@@ -71,7 +72,8 @@ export default function ServicesCarousel() {
 
         @supports not (overflow: clip) {
           #services {
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: visible;
           }
         }
 
@@ -120,38 +122,31 @@ export default function ServicesCarousel() {
           </div>
         </div>
 
-        <div className={`${styles.serviceCarousel} scroll-reveal`} aria-label="Client-focused WordPress services carousel">
-          <div className={`${styles.serviceFade} ${styles.serviceFadeLeft}`} aria-hidden="true" />
-          <div className={`${styles.serviceFade} ${styles.serviceFadeRight}`} aria-hidden="true" />
-
-          <div className={styles.serviceTrack}>
-            {[0, 1].map((group) => (
-              <div className={styles.serviceGroup} key={group} aria-hidden={group === 1}>
-                {services.map((service) => (
-                  <article className={styles.serviceCard} key={`${group}-${service.title}`}>
-                    <div className={styles.serviceCardTop}>
-                      <small className={styles.serviceNumber}>{service.label}</small>
-                      <span className={styles.serviceProof}>{service.proof}</span>
-                    </div>
-
-                    <div className={styles.serviceIcon}>{service.icon}</div>
-                    <h3>{service.title}</h3>
-                    <p>{service.copy}</p>
-
-                    <div className={styles.serviceIncludes}>
-                      <strong>Includes</strong>
-                      <span>{service.deliverable}</span>
-                    </div>
-
-                    <span className={styles.serviceFit}>{service.fit} →</span>
-                  </article>
-                ))}
+        <div className={styles.serviceStack} aria-label="Client-focused WordPress services vertical scroll">
+          {services.map((service, index) => (
+            <article className={`${styles.serviceCard} scroll-reveal`} key={service.title}>
+              <div className={styles.serviceCardTop}>
+                <small className={styles.serviceNumber}>{service.label}</small>
+                <span className={styles.serviceProof}>{service.proof}</span>
               </div>
-            ))}
-          </div>
-        </div>
 
-        <p className={styles.serviceMobileHint}>Swipe services →</p>
+              <div className={styles.serviceCardBody}>
+                <div className={styles.serviceIcon}>{service.icon}</div>
+                <h3>{service.title}</h3>
+                <p>{service.copy}</p>
+
+                <div className={styles.serviceIncludes}>
+                  <strong>Includes</strong>
+                  <span>{service.deliverable}</span>
+                </div>
+
+                <span className={styles.serviceFit}>{service.fit} →</span>
+              </div>
+
+              <span className={styles.serviceCardIndex}>0{index + 1}</span>
+            </article>
+          ))}
+        </div>
       </div>
     </>
   );
