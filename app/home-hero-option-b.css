@@ -251,7 +251,7 @@
 
 .home-hero-b-strip {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 22px;
@@ -268,24 +268,27 @@
 
 .home-hero-b-card {
   position: relative;
+  z-index: 2;
   flex: 0 0 auto;
   width: 252px;
   height: 158px;
   border-radius: 20px;
   overflow: hidden;
-  background: rgba(255,255,255,.86);
+  background: rgba(255,255,255,.92);
   border: 1px solid rgba(0,0,0,.07);
   box-shadow: 0 20px 55px rgba(0,0,0,.10);
   text-align: left;
   transform: translateZ(0);
   backdrop-filter: blur(12px);
+  opacity: 1;
+  visibility: visible;
 }
 
 .home-hero-b-card:nth-child(1),
 .home-hero-b-card:nth-child(7) {
-  opacity: .24;
-  transform: scale(.86);
-  filter: blur(1px);
+  opacity: .52;
+  transform: scale(.9);
+  filter: blur(.4px);
 }
 
 .home-hero-b-browser {
@@ -458,7 +461,7 @@
 
 .home-hero-b-portrait {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   width: 315px;
   height: 382px;
   border-radius: 30px;
