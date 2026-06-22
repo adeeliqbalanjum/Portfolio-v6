@@ -8,7 +8,6 @@ import { TextRevealByWord } from "./components/TextReveal";
 import { ZoomParallax, ParallaxItem } from "./components/ZoomParallax";
 import { TextRotate } from "./components/TextRotate";
 import ServicesCarousel from "./components/ServicesCarousel";
-import Services3DGallery from "./components/Services3DGallery";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -389,8 +388,6 @@ export default function Home() {
           <ServicesCarousel />
         </div>
       </section>
-
-      <Services3DGallery />
 
       <section className="section flow-section portfolio-section" id="process">
         <div className="container flow-inner">
