@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
   Code2,
@@ -19,7 +20,7 @@ type TimelineItem = {
   date: string;
   content: string;
   category: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   relatedIds: number[];
   status: "completed" | "in-progress" | "pending";
   energy: number;
