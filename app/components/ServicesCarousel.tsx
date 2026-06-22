@@ -1,7 +1,5 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
 import styles from "../services.module.css";
 
 const services = [
@@ -45,7 +43,7 @@ const services = [
     label: "05 — OPTIMIZE",
     title: "Speed & Technical Fixes",
     copy: "Performance cleanup, mobile bug fixing, plugin conflict checks, Core Web Vitals improvements, and WordPress troubleshooting.",
-    deliverable: "Cache setup, image optimization, plugin audit, technical QA.",
+    deliverable: "Cache setup, image optimization, layout fixes, plugin audit, technical QA.",
     proof: "Faster UX",
     fit: "Best for slow websites",
     icon: "⚡",
@@ -53,105 +51,103 @@ const services = [
 ];
 
 export default function ServicesCarousel() {
-  const targetRef = useRef<HTMLElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [scrollDistance, setScrollDistance] = useState(0);
-
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end end"],
-  });
-
-  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance]);
-  const shellStyle = {
-    "--service-scroll-distance": `${scrollDistance}px`,
-  } as CSSProperties;
-
-  useEffect(() => {
-    const pin = pinRef.current;
-    const track = trackRef.current;
-
-    if (!pin || !track) return undefined;
-
-    const updateScrollDistance = () => {
-      const desktop = window.matchMedia("(min-width: 901px)").matches;
-      const distance = desktop ? Math.max(0, track.scrollWidth - pin.clientWidth) : 0;
-      setScrollDistance(distance);
-    };
-
-    updateScrollDistance();
-
-    const observer = new ResizeObserver(updateScrollDistance);
-    observer.observe(pin);
-    observer.observe(track);
-    window.addEventListener("resize", updateScrollDistance);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", updateScrollDistance);
-    };
-  }, []);
-
   return (
     <>
       <style>{`
-        #services > .container.flow-inner,
-        #services .scroll-reveal {
-          transform: none !important;
-          opacity: 1 !important;
-          filter: none !important;
+        #services {
+          position: relative;
+          overflow-x: clip;
+          overflow-y: visible;
+          isolation: isolate;
+          background:
+            radial-gradient(circle at 0% 0%, rgba(125, 211, 252, .30), transparent 42%),
+            radial-gradient(circle at 100% 0%, rgba(134, 239, 172, .30), transparent 44%),
+            radial-gradient(circle at 50% 100%, rgba(255, 255, 255, .58), transparent 54%),
+            linear-gradient(135deg, rgba(255, 255, 255, .48), rgba(255, 255, 255, .22));
+          border-top: 1px solid rgba(255, 255, 255, .55);
+          border-bottom: 1px solid rgba(255, 255, 255, .55);
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        @supports not (overflow: clip) {
+          #services {
+            overflow-x: hidden;
+            overflow-y: visible;
+          }
+        }
+
+        #services::-webkit-scrollbar,
+        #services *::-webkit-scrollbar {
+          display: none;
+        }
+
+        #services::before {
+          content: "";
+          position: absolute;
+          inset: -18% -8% -12%;
+          z-index: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(circle at 8% 8%, rgba(125, 211, 252, .28), transparent 45%),
+            radial-gradient(circle at 92% 12%, rgba(134, 239, 172, .25), transparent 42%),
+            radial-gradient(circle at 50% 90%, rgba(255, 255, 255, .55), transparent 52%);
+          filter: blur(10px);
+        }
+
+        #services > .container {
+          position: relative;
+          z-index: 1;
+          overflow: visible;
         }
       `}</style>
 
-      <section className={styles.serviceShell} ref={targetRef} style={shellStyle}>
-        <div className={styles.servicePin} ref={pinRef}>
-          <motion.div className={styles.serviceTrack} ref={trackRef} style={{ x }}>
-            <article className={`${styles.serviceFeature} ${styles.serviceSlide}`}>
-              <div className={styles.serviceFeatureCopy}>
-                <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
-                <h3>Design quality, WordPress functionality, and clean handover in one build.</h3>
-                <p>
-                  This section now sells outcomes instead of only listing tools. It shows clients that you can handle the full website workflow: design conversion, responsive build, custom logic, speed, QA, and launch support.
-                </p>
-              </div>
+      <div className={styles.serviceShell}>
+        <div className={`${styles.serviceFeature} scroll-reveal`}>
+          <div className={styles.serviceFeatureCopy}>
+            <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
+            <h3>Design quality, WordPress functionality, and clean handover in one build.</h3>
+            <p>
+              This section now sells outcomes instead of only listing tools. It shows clients that you can handle the full website workflow: design conversion, responsive build, custom logic, speed, QA, and launch support.
+            </p>
+          </div>
 
-              <div className={styles.serviceFeatureActions}>
-                <div className={styles.serviceProofGrid}>
-                  <div className={styles.serviceProofPill}>Editable build <span>Elementor Pro</span></div>
-                  <div className={styles.serviceProofPill}>Custom logic <span>PHP / ACF / CPT</span></div>
-                  <div className={styles.serviceProofPill}>Launch ready <span>Speed + QA</span></div>
-                </div>
-                <a href="#contact" className="btn btn-dark">Start a project →</a>
-              </div>
-            </article>
-
-            {services.map((service, index) => (
-              <article className={`${styles.serviceCard} ${styles.serviceSlide}`} key={service.title}>
-                <div className={styles.serviceCardTop}>
-                  <small className={styles.serviceNumber}>{service.label}</small>
-                  <span className={styles.serviceProof}>{service.proof}</span>
-                </div>
-
-                <div className={styles.serviceCardBody}>
-                  <div className={styles.serviceIcon}>{service.icon}</div>
-                  <h3>{service.title}</h3>
-                  <p>{service.copy}</p>
-
-                  <div className={styles.serviceIncludes}>
-                    <strong>Includes</strong>
-                    <span>{service.deliverable}</span>
-                  </div>
-
-                  <span className={styles.serviceFit}>{service.fit} →</span>
-                </div>
-
-                <span className={styles.serviceCardIndex}>0{index + 1}</span>
-              </article>
-            ))}
-          </motion.div>
+          <div className={styles.serviceFeatureActions}>
+            <div className={styles.serviceProofGrid}>
+              <div className={styles.serviceProofPill}>Editable build <span>Elementor Pro</span></div>
+              <div className={styles.serviceProofPill}>Custom logic <span>PHP / ACF / CPT</span></div>
+              <div className={styles.serviceProofPill}>Launch ready <span>Speed + QA</span></div>
+            </div>
+            <a href="#contact" className="btn btn-dark">Start a project →</a>
+          </div>
         </div>
-      </section>
+
+        <div className={styles.serviceStack} aria-label="Client-focused WordPress services vertical scroll">
+          {services.map((service, index) => (
+            <article className={`${styles.serviceCard} scroll-reveal`} key={service.title}>
+              <div className={styles.serviceCardTop}>
+                <small className={styles.serviceNumber}>{service.label}</small>
+                <span className={styles.serviceProof}>{service.proof}</span>
+              </div>
+
+              <div className={styles.serviceCardBody}>
+                <div className={styles.serviceIcon}>{service.icon}</div>
+                <h3>{service.title}</h3>
+                <p>{service.copy}</p>
+
+                <div className={styles.serviceIncludes}>
+                  <strong>Includes</strong>
+                  <span>{service.deliverable}</span>
+                </div>
+
+                <span className={styles.serviceFit}>{service.fit} →</span>
+              </div>
+
+              <span className={styles.serviceCardIndex}>0{index + 1}</span>
+            </article>
+          ))}
+        </div>
+      </div>
     </>
   );
 }
