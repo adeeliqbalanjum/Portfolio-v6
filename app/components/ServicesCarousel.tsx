@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "../services.module.css";
 
 const services = [
