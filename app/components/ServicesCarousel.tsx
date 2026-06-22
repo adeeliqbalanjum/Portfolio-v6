@@ -1,6 +1,11 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "../services.module.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
@@ -51,6 +56,45 @@ const services = [
 ];
 
 export default function ServicesCarousel() {
+  const pinRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 901px)", () => {
+      const pin = pinRef.current;
+      const track = trackRef.current;
+
+      if (!pin || !track) return undefined;
+
+      const getDistance = () => Math.max(0, track.scrollWidth - pin.clientWidth);
+
+      const tween = gsap.to(track, {
+        x: () => -getDistance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: pin,
+          start: "top top",
+          end: () => `+=${getDistance() + window.innerHeight * 0.65}`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      ScrollTrigger.refresh();
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      };
+    });
+
+    return () => mm.revert();
+  }, []);
+
   return (
     <>
       <style>{`
@@ -103,49 +147,51 @@ export default function ServicesCarousel() {
       `}</style>
 
       <div className={styles.serviceShell}>
-        <div className={`${styles.serviceFeature} scroll-reveal`}>
-          <div className={styles.serviceFeatureCopy}>
-            <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
-            <h3>Design quality, WordPress functionality, and clean handover in one build.</h3>
-            <p>
-              This section now sells outcomes instead of only listing tools. It shows clients that you can handle the full website workflow: design conversion, responsive build, custom logic, speed, QA, and launch support.
-            </p>
-          </div>
-
-          <div className={styles.serviceFeatureActions}>
-            <div className={styles.serviceProofGrid}>
-              <div className={styles.serviceProofPill}>Editable build <span>Elementor Pro</span></div>
-              <div className={styles.serviceProofPill}>Custom logic <span>PHP / ACF / CPT</span></div>
-              <div className={styles.serviceProofPill}>Launch ready <span>Speed + QA</span></div>
-            </div>
-            <a href="#contact" className="btn btn-dark">Start a project →</a>
-          </div>
-        </div>
-
-        <div className={styles.serviceStack} aria-label="Client-focused WordPress services vertical scroll">
-          {services.map((service, index) => (
-            <article className={`${styles.serviceCard} scroll-reveal`} key={service.title}>
-              <div className={styles.serviceCardTop}>
-                <small className={styles.serviceNumber}>{service.label}</small>
-                <span className={styles.serviceProof}>{service.proof}</span>
+        <div className={styles.servicePin} ref={pinRef}>
+          <div className={styles.serviceTrack} ref={trackRef}>
+            <article className={`${styles.serviceFeature} ${styles.serviceSlide} scroll-reveal`}>
+              <div className={styles.serviceFeatureCopy}>
+                <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
+                <h3>Design quality, WordPress functionality, and clean handover in one build.</h3>
+                <p>
+                  This section now sells outcomes instead of only listing tools. It shows clients that you can handle the full website workflow: design conversion, responsive build, custom logic, speed, QA, and launch support.
+                </p>
               </div>
 
-              <div className={styles.serviceCardBody}>
-                <div className={styles.serviceIcon}>{service.icon}</div>
-                <h3>{service.title}</h3>
-                <p>{service.copy}</p>
+              <div className={styles.serviceFeatureActions}>
+                <div className={styles.serviceProofGrid}>
+                  <div className={styles.serviceProofPill}>Editable build <span>Elementor Pro</span></div>
+                  <div className={styles.serviceProofPill}>Custom logic <span>PHP / ACF / CPT</span></div>
+                  <div className={styles.serviceProofPill}>Launch ready <span>Speed + QA</span></div>
+                </div>
+                <a href="#contact" className="btn btn-dark">Start a project →</a>
+              </div>
+            </article>
 
-                <div className={styles.serviceIncludes}>
-                  <strong>Includes</strong>
-                  <span>{service.deliverable}</span>
+            {services.map((service, index) => (
+              <article className={`${styles.serviceCard} ${styles.serviceSlide} scroll-reveal`} key={service.title}>
+                <div className={styles.serviceCardTop}>
+                  <small className={styles.serviceNumber}>{service.label}</small>
+                  <span className={styles.serviceProof}>{service.proof}</span>
                 </div>
 
-                <span className={styles.serviceFit}>{service.fit} →</span>
-              </div>
+                <div className={styles.serviceCardBody}>
+                  <div className={styles.serviceIcon}>{service.icon}</div>
+                  <h3>{service.title}</h3>
+                  <p>{service.copy}</p>
 
-              <span className={styles.serviceCardIndex}>0{index + 1}</span>
-            </article>
-          ))}
+                  <div className={styles.serviceIncludes}>
+                    <strong>Includes</strong>
+                    <span>{service.deliverable}</span>
+                  </div>
+
+                  <span className={styles.serviceFit}>{service.fit} →</span>
+                </div>
+
+                <span className={styles.serviceCardIndex}>0{index + 1}</span>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </>
