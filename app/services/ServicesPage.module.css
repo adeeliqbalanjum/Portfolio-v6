@@ -133,13 +133,18 @@
   display: grid;
   grid-template-columns: .86fr 1.14fr;
   gap: 42px;
-  align-items: start;
+  align-items: stretch;
+}
+
+.previewHeadRail {
+  position: relative;
+  min-height: 100%;
+  align-self: stretch;
 }
 
 .previewHead {
   position: sticky;
   top: 92px;
-  align-self: start;
   min-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
@@ -341,6 +346,10 @@
   .previewInner {
     grid-template-columns: 1fr;
     gap: 28px;
+  }
+
+  .previewHeadRail {
+    min-height: auto;
   }
 
   .previewHead {
