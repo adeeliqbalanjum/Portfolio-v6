@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import styles from "../services.module.css";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
@@ -59,59 +56,45 @@ export default function ServicesCarousel() {
   const rootRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const [distance, setDistance] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: rootRef,
+    offset: ["start start", "end end"],
+  });
+
+  const rawX = useTransform(scrollYProgress, [0, 1], [0, -distance]);
+  const x = useSpring(rawX, { stiffness: 90, damping: 28, mass: 0.35 });
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return undefined;
+    const pin = pinRef.current;
+    const track = trackRef.current;
 
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
+    if (!pin || !track) return undefined;
 
-      mm.add("(min-width: 901px)", () => {
-        const pin = pinRef.current;
-        const track = trackRef.current;
+    const updateDistance = () => {
+      const isDesktop = window.matchMedia("(min-width: 901px)").matches;
+      const nextDistance = isDesktop ? Math.max(0, track.scrollWidth - pin.clientWidth) : 0;
+      setDistance(nextDistance);
+    };
 
-        if (!pin || !track) return undefined;
+    updateDistance();
 
-        const getScrollDistance = () => Math.max(0, track.scrollWidth - pin.clientWidth);
+    const resizeObserver = new ResizeObserver(updateDistance);
+    resizeObserver.observe(pin);
+    resizeObserver.observe(track);
+    window.addEventListener("resize", updateDistance);
 
-        gsap.set(track, { x: 0 });
-
-        const tween = gsap.to(track, {
-          x: () => -getScrollDistance(),
-          ease: "none",
-          scrollTrigger: {
-            id: "services-horizontal-scroll",
-            trigger: pin,
-            start: "top 92px",
-            end: () => `+=${getScrollDistance()}`,
-            scrub: 0.75,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        requestAnimationFrame(() => ScrollTrigger.refresh());
-
-        return () => {
-          tween.scrollTrigger?.kill();
-          tween.kill();
-          gsap.set(track, { clearProps: "transform" });
-        };
-      });
-
-      return () => mm.revert();
-    }, root);
-
-    return () => ctx.revert();
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateDistance);
+    };
   }, []);
 
   return (
     <div className={styles.serviceShell} ref={rootRef}>
       <div className={styles.servicePin} ref={pinRef}>
-        <div className={styles.serviceTrack} ref={trackRef}>
+        <motion.div className={styles.serviceTrack} ref={trackRef} style={{ x }}>
           <article className={`${styles.serviceFeature} ${styles.serviceSlide} scroll-reveal`}>
             <div className={styles.serviceFeatureCopy}>
               <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
@@ -154,7 +137,7 @@ export default function ServicesCarousel() {
               <span className={styles.serviceCardIndex}>0{index + 1}</span>
             </article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
