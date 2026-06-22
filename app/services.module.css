@@ -1,3 +1,11 @@
+:global(#services) {
+  background:
+    radial-gradient(circle at 18% 10%, rgba(255, 122, 24, .055), transparent 30%),
+    radial-gradient(circle at 82% 14%, rgba(168, 85, 247, .045), transparent 28%),
+    radial-gradient(circle at 54% 92%, rgba(34, 197, 94, .045), transparent 34%),
+    linear-gradient(180deg, #fafaf8 0%, #f2f2ef 100%);
+}
+
 .serviceShell {
   position: relative;
   overflow: hidden;
@@ -12,11 +20,12 @@
   height: min(760px, 90vw);
   border-radius: 50%;
   background:
-    radial-gradient(circle, rgba(255, 122, 24, .16), transparent 54%),
-    radial-gradient(circle at 72% 32%, rgba(168, 85, 247, .12), transparent 38%);
+    radial-gradient(circle, rgba(255, 122, 24, .075), transparent 54%),
+    radial-gradient(circle at 72% 32%, rgba(168, 85, 247, .060), transparent 38%),
+    radial-gradient(circle at 42% 74%, rgba(34, 197, 94, .050), transparent 42%);
   transform: translate(-50%, -50%);
   pointer-events: none;
-  filter: blur(6px);
+  filter: blur(8px);
 }
 
 .serviceHead,
@@ -36,18 +45,20 @@
   border-radius: 30px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 14% 20%, rgba(255, 122, 24, .20), transparent 34%),
-    radial-gradient(circle at 82% 18%, rgba(34, 197, 94, .14), transparent 32%),
-    linear-gradient(135deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .52));
-  border: 1px solid rgba(0, 0, 0, .065);
-  box-shadow: 0 28px 90px rgba(0, 0, 0, .08);
+    radial-gradient(circle at 18% 18%, rgba(255, 122, 24, .075), transparent 32%),
+    radial-gradient(circle at 84% 20%, rgba(168, 85, 247, .055), transparent 30%),
+    radial-gradient(circle at 70% 88%, rgba(34, 197, 94, .050), transparent 32%),
+    rgba(255, 255, 255, .68);
+  border: 1px solid rgba(0, 0, 0, .055);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, .060);
+  backdrop-filter: blur(16px);
 }
 
 .serviceFeature::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .58) 45%, transparent 68%);
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .40) 45%, transparent 68%);
   transform: translateX(-75%);
   animation: featureShine 6s ease-in-out infinite;
   pointer-events: none;
@@ -55,7 +66,7 @@
 
 @keyframes featureShine {
   0%, 48% { transform: translateX(-78%); opacity: 0; }
-  58% { opacity: .82; }
+  58% { opacity: .58; }
   76%, 100% { transform: translateX(78%); opacity: 0; }
 }
 
@@ -71,8 +82,10 @@
   gap: 8px;
   padding: 7px 12px;
   border-radius: 999px;
-  background: #070707;
-  color: #fff;
+  background: rgba(255, 255, 255, .68);
+  border: 1px solid rgba(0, 0, 0, .060);
+  color: rgba(0, 0, 0, .52);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .040);
   font-size: 12px;
   font-weight: 900;
   letter-spacing: -.025em;
@@ -84,7 +97,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--green);
-  box-shadow: 0 0 18px rgba(34, 197, 94, .44);
+  box-shadow: 0 0 18px rgba(34, 197, 94, .34);
 }
 
 .serviceFeatureCopy h3 {
@@ -128,12 +141,12 @@
   gap: 14px;
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, .72);
+  background: rgba(255, 255, 255, .66);
   border: 1px solid rgba(0, 0, 0, .055);
   font-size: 13px;
   font-weight: 900;
-  color: rgba(0, 0, 0, .66);
-  box-shadow: 0 12px 34px rgba(0, 0, 0, .045);
+  color: rgba(0, 0, 0, .62);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .038);
 }
 
 .serviceProofPill span {
@@ -159,12 +172,12 @@
 
 .serviceFadeLeft {
   left: 0;
-  background: linear-gradient(90deg, var(--bg), rgba(250, 250, 248, 0));
+  background: linear-gradient(90deg, #f5f5f2, rgba(245, 245, 242, 0));
 }
 
 .serviceFadeRight {
   right: 0;
-  background: linear-gradient(270deg, var(--bg), rgba(250, 250, 248, 0));
+  background: linear-gradient(270deg, #f5f5f2, rgba(245, 245, 242, 0));
 }
 
 .serviceTrack {
@@ -196,10 +209,11 @@
   padding: 22px;
   border-radius: 28px;
   overflow: hidden;
-  background: rgba(255, 255, 255, .78);
-  border: 1px solid rgba(0, 0, 0, .065);
-  box-shadow: 0 22px 70px rgba(0, 0, 0, .075);
+  background: rgba(255, 255, 255, .74);
+  border: 1px solid rgba(0, 0, 0, .055);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .052);
   transition: transform .32s cubic-bezier(.2, .8, .2, 1), box-shadow .32s cubic-bezier(.2, .8, .2, 1), background .32s ease;
+  backdrop-filter: blur(12px);
 }
 
 .serviceCard::before {
@@ -207,16 +221,17 @@
   position: absolute;
   inset: -1px;
   background:
-    radial-gradient(circle at 22% 18%, rgba(255, 122, 24, .16), transparent 35%),
-    radial-gradient(circle at 90% 4%, rgba(168, 85, 247, .13), transparent 32%);
-  opacity: .74;
+    radial-gradient(circle at 22% 18%, rgba(255, 122, 24, .070), transparent 35%),
+    radial-gradient(circle at 90% 4%, rgba(168, 85, 247, .060), transparent 32%),
+    radial-gradient(circle at 68% 88%, rgba(34, 197, 94, .045), transparent 30%);
+  opacity: .86;
   pointer-events: none;
 }
 
 .serviceCard:hover {
   transform: translateY(-8px) scale(1.012);
-  background: rgba(255, 255, 255, .92);
-  box-shadow: 0 34px 95px rgba(0, 0, 0, .14);
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 30px 72px rgba(0, 0, 0, .100);
 }
 
 .serviceCardTop,
@@ -239,7 +254,7 @@
 .serviceNumber {
   font-size: 12px;
   font-weight: 950;
-  color: rgba(0, 0, 0, .38);
+  color: rgba(0, 0, 0, .36);
   letter-spacing: -.025em;
 }
 
@@ -249,8 +264,8 @@
   min-height: 30px;
   padding: 0 11px;
   border-radius: 999px;
-  background: rgba(7, 7, 7, .06);
-  color: rgba(0, 0, 0, .58);
+  background: rgba(7, 7, 7, .045);
+  color: rgba(0, 0, 0, .54);
   font-size: 11px;
   font-weight: 950;
   letter-spacing: -.025em;
@@ -264,11 +279,11 @@
   display: grid;
   place-items: center;
   border-radius: 19px;
-  background: #070707;
+  background: linear-gradient(135deg, #070707, rgba(7, 7, 7, .88));
   color: #fff;
   font-size: 25px;
   font-weight: 900;
-  box-shadow: 0 18px 46px rgba(0, 0, 0, .20);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .18);
 }
 
 .serviceCard h3 {
@@ -281,7 +296,7 @@
 
 .serviceCard p {
   margin: 12px 0 0;
-  color: rgba(0, 0, 0, .52);
+  color: rgba(0, 0, 0, .50);
   font-size: 13px;
   line-height: 1.55;
   font-weight: 650;
@@ -290,12 +305,12 @@
 .serviceIncludes {
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid rgba(0, 0, 0, .07);
+  border-top: 1px solid rgba(0, 0, 0, .060);
 }
 
 .serviceIncludes strong {
   display: block;
-  color: rgba(0, 0, 0, .38);
+  color: rgba(0, 0, 0, .36);
   font-size: 11px;
   font-weight: 950;
   text-transform: uppercase;
@@ -305,7 +320,7 @@
 .serviceIncludes span {
   display: block;
   margin-top: 7px;
-  color: rgba(0, 0, 0, .68);
+  color: rgba(0, 0, 0, .64);
   font-size: 12px;
   line-height: 1.45;
   font-weight: 800;
