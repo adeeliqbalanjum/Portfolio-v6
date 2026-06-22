@@ -56,7 +56,8 @@ export default function ServicesCarousel() {
       <style>{`
         #services {
           position: relative;
-          overflow: hidden;
+          overflow: clip;
+          isolation: isolate;
           background:
             radial-gradient(circle at 0% 0%, rgba(125, 211, 252, .30), transparent 42%),
             radial-gradient(circle at 100% 0%, rgba(134, 239, 172, .30), transparent 44%),
@@ -64,6 +65,19 @@ export default function ServicesCarousel() {
             linear-gradient(135deg, rgba(255, 255, 255, .48), rgba(255, 255, 255, .22));
           border-top: 1px solid rgba(255, 255, 255, .55);
           border-bottom: 1px solid rgba(255, 255, 255, .55);
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        @supports not (overflow: clip) {
+          #services {
+            overflow: hidden;
+          }
+        }
+
+        #services::-webkit-scrollbar,
+        #services *::-webkit-scrollbar {
+          display: none;
         }
 
         #services::before {
@@ -82,6 +96,7 @@ export default function ServicesCarousel() {
         #services > .container {
           position: relative;
           z-index: 1;
+          overflow: visible;
         }
       `}</style>
 
