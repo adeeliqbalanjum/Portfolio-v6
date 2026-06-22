@@ -4,7 +4,61 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 
+const basePath = process.env.NODE_ENV === "production" ? "/Portfolio-v6" : "";
 const portraitDataUrl = "https://avatars.githubusercontent.com/u/178131381?v=4";
+
+const cards = [
+  { title: "Desert Safari Booking Form", desc: "Private/shared tour pricing, add-ons, AED totals and booking emails.", image: "", badge: "AED", accent: "#ff7a18" },
+  { title: "Griffin IT", desc: "Hardware solutions website for MSP & IT providers.", image: `${basePath}/work-images/griffin-it.webp`, badge: "GI", accent: "#0ea5e9" },
+  { title: "Kay Kay Travels", desc: "International travels and tours website rebuild.", image: `${basePath}/work-images/kay-kay.webp`, badge: "KKT", accent: "#22c55e" },
+  { title: "Book My Holidays", desc: "Holiday booking website for travel enquiries.", image: `${basePath}/work-images/book-my-holidays.webp`, badge: "BMH", accent: "#38bdf8" },
+  { title: "FastDocNow", desc: "Healthcare WordPress website with mobile-first user flow.", image: `${basePath}/work-images/fastdocnow.webp`, badge: "FDN", accent: "#2563eb" },
+  { title: "Griffin Resources", desc: "Business website with a premium brand feel.", image: `${basePath}/work-images/griffin-resources.webp`, badge: "GR", accent: "#a855f7" },
+  { title: "Build Stack", desc: "WordPress, Elementor Pro, WooCommerce, ACF, PHP, GSAP.", image: "", badge: "WP", accent: "#070707" },
+];
+
+const badgeStyle = (accent: string): React.CSSProperties => ({
+  minWidth: 30,
+  height: 18,
+  borderRadius: 999,
+  background: accent,
+  color: "#fff",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  paddingInline: 7,
+  fontSize: 9,
+  lineHeight: 1,
+  fontWeight: 950,
+  letterSpacing: "-.035em",
+  boxShadow: "0 8px 20px rgba(0,0,0,.18)",
+  flex: "0 0 auto",
+});
+
+function HeroCardItem({ card }: { card: (typeof cards)[number] }) {
+  return (
+    <article className="home-hero-b-card">
+      <div className="home-hero-b-browser"><i /><i /><i /></div>
+      {card.image ? <img src={card.image} alt="" /> : (
+        <div className="home-hero-b-stack" aria-hidden="true">
+          <div className="home-hero-b-mini-title">
+            <span style={badgeStyle(card.accent)}>{card.badge}</span>
+            <strong>{card.badge === "AED" ? "Safari Booking" : "Production Stack"}</strong>
+          </div>
+          <div className="home-hero-b-tools">
+            {(card.badge === "AED" ? ["Private", "Shared", "Add-ons", "AED"] : ["WP", "Elementor", "Woo", "ACF", "PHP", "GSAP"]).map((tool, index) => (
+              <span key={tool} className={index === 1 ? "is-active" : ""}>{tool}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="home-hero-b-card-body" data-image={card.image ? "true" : "false"}>
+        <h3><span style={badgeStyle(card.accent)}>{card.badge}</span><span>{card.title}</span></h3>
+        <p>{card.desc}</p>
+      </div>
+    </article>
+  );
+}
 
 function HomeHeroOptionB() {
   return (
@@ -37,6 +91,9 @@ function HomeHeroOptionB() {
 
         <div className="home-hero-b-showcase ha-showcase" aria-label="Portfolio preview">
           <div className="home-hero-b-haze" />
+          <div className="home-hero-b-strip" aria-hidden="true">
+            {cards.map((card) => <HeroCardItem card={card} key={card.title} />)}
+          </div>
           <div className="home-hero-b-portrait">
             <img src={portraitDataUrl} alt="Muhammad Adeel Iqbal" />
           </div>
