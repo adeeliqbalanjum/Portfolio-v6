@@ -1,8 +1,8 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMotionValueEvent, useScroll, useSpring } from "motion/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMotionValueEvent, useScroll } from "motion/react";
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import styles from "../services3d.module.css";
 
@@ -202,6 +202,24 @@ function createServiceTexture(service: PremiumService, index: number) {
   return texture;
 }
 
+function getCardTimeline(progress: number) {
+  const maxIndex = premiumServices.length - 1;
+  if (maxIndex <= 0) return 0;
+
+  const raw = THREE.MathUtils.clamp(progress, 0, 1) * (maxIndex * 2 + 1);
+
+  if (raw >= maxIndex * 2) {
+    return maxIndex;
+  }
+
+  const baseIndex = Math.min(Math.floor(raw / 2), maxIndex - 1);
+  const local = raw - baseIndex * 2;
+  const transitionAmount = THREE.MathUtils.clamp((local - 0.72) / 0.72, 0, 1);
+  const easedTransition = THREE.MathUtils.smoothstep(transitionAmount, 0, 1);
+
+  return baseIndex + easedTransition;
+}
+
 function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
   const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
 
@@ -218,7 +236,7 @@ function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    const timeline = progressRef.current * (premiumServices.length - 1);
+    const timeline = getCardTimeline(progressRef.current);
 
     premiumServices.forEach((_, index) => {
       const mesh = meshRefs.current[index];
@@ -227,24 +245,25 @@ function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
       const delta = index - timeline;
       const distance = Math.abs(delta);
       const activeWeight = THREE.MathUtils.clamp(1 - distance, 0, 1);
-      const nearWeight = THREE.MathUtils.clamp(1 - distance / 1.25, 0, 1);
-      const visibleWeight = THREE.MathUtils.clamp(1 - distance / 1.05, 0, 1);
+      const nearWeight = THREE.MathUtils.clamp(1 - distance / 1.12, 0, 1);
+      const visibleWeight = THREE.MathUtils.clamp(1 - distance / 0.92, 0, 1);
 
-      const clampedDelta = THREE.MathUtils.clamp(delta, -1.35, 1.35);
-      const x = clampedDelta * 0.16;
-      const y = -clampedDelta * 3.25;
-      const z = THREE.MathUtils.lerp(-4.2, 2.6, nearWeight);
-      const scale = THREE.MathUtils.lerp(0.82, 1.08, activeWeight);
+      const clampedDelta = THREE.MathUtils.clamp(delta, -1.2, 1.2);
+      const x = 0.95 + clampedDelta * 0.08;
+      const y = -clampedDelta * 3.18;
+      const z = THREE.MathUtils.lerp(-5.1, 2.25, nearWeight);
+      const scale = THREE.MathUtils.lerp(0.78, 0.98, activeWeight);
 
       mesh.position.set(x, y, z);
-      mesh.rotation.x = THREE.MathUtils.lerp(0.26 * Math.sign(delta), 0, activeWeight);
-      mesh.rotation.y = Math.sin(time * 0.25 + index) * 0.025;
-      mesh.rotation.z = THREE.MathUtils.lerp(-0.08 * Math.sign(delta), 0, activeWeight);
+      mesh.rotation.x = THREE.MathUtils.lerp(0.22 * Math.sign(delta), 0, activeWeight);
+      mesh.rotation.y = Math.sin(time * 0.22 + index) * 0.018;
+      mesh.rotation.z = THREE.MathUtils.lerp(-0.06 * Math.sign(delta), 0, activeWeight);
       mesh.scale.setScalar(scale);
-      mesh.renderOrder = Math.round(activeWeight * 1000);
+      mesh.renderOrder = Math.round(activeWeight * 1000 + visibleWeight * 100);
 
       const material = mesh.material as THREE.MeshBasicMaterial;
       material.opacity = visibleWeight;
+      material.depthWrite = false;
       material.needsUpdate = true;
     });
   });
@@ -259,7 +278,7 @@ function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
           ref={(mesh) => {
             meshRefs.current[index] = mesh;
           }}
-          position={[0, index === 0 ? 0 : -4, index === 0 ? 2.6 : -4.2]}
+          position={[0.95, index === 0 ? 0 : -4, index === 0 ? 2.25 : -5.1]}
         >
           <planeGeometry args={[5.35, 3.76, 18, 12]} />
           <meshBasicMaterial
@@ -297,17 +316,21 @@ export default function Services3DGallery() {
   const [mounted, setMounted] = useState(false);
   const [webglSupported, setWebglSupported] = useState(true);
 
+  const sectionStyle = {
+    "--services3d-scroll-length": `${premiumServices.length * 38}svh`,
+  } as CSSProperties;
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 70, damping: 24, mass: 0.45 });
 
-  useMotionValueEvent(smoothProgress, "change", (latest) => {
-    progressRef.current = latest;
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    progressRef.current = THREE.MathUtils.clamp(latest, 0, 1);
   });
 
   useEffect(() => {
+    progressRef.current = THREE.MathUtils.clamp(scrollYProgress.get(), 0, 1);
     setMounted(true);
 
     try {
@@ -317,10 +340,10 @@ export default function Services3DGallery() {
     } catch {
       setWebglSupported(false);
     }
-  }, []);
+  }, [scrollYProgress]);
 
   return (
-    <section className={styles.section} id="services-3d" ref={sectionRef}>
+    <section className={styles.section} id="services-3d" ref={sectionRef} style={sectionStyle}>
       <div className={styles.stage}>
         {mounted && webglSupported ? (
           <Canvas camera={{ position: [0, 0, 10], fov: 44 }} gl={{ antialias: true, alpha: true }}>
@@ -335,13 +358,13 @@ export default function Services3DGallery() {
           <span>Premium service experience</span>
           <h2>One premium service card at a time.</h2>
           <p>
-            Scroll slowly and each service moves into the same focused position, so the full card content stays readable before the next one arrives.
+            Scroll slowly and each service holds in focus before the next card moves into the same readable position.
           </p>
         </div>
 
         <div className={styles.instructions}>
           <strong>Scroll the page to navigate</strong>
-          <span>Cards change one by one</span>
+          <span>Section stays pinned until the last card finishes</span>
         </div>
       </div>
     </section>
