@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import styles from "../services.module.css";
 
@@ -53,22 +53,60 @@ const services = [
 ];
 
 export default function ServicesCarousel() {
-  const targetRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start start", "end end"] });
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-83.333%"]);
+  const targetRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [scrollDistance, setScrollDistance] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end end"],
+  });
+
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance]);
+  const shellStyle = {
+    "--service-scroll-distance": `${scrollDistance}px`,
+  } as CSSProperties;
+
+  useEffect(() => {
+    const pin = pinRef.current;
+    const track = trackRef.current;
+
+    if (!pin || !track) return undefined;
+
+    const updateScrollDistance = () => {
+      const desktop = window.matchMedia("(min-width: 901px)").matches;
+      const distance = desktop ? Math.max(0, track.scrollWidth - pin.clientWidth) : 0;
+      setScrollDistance(distance);
+    };
+
+    updateScrollDistance();
+
+    const observer = new ResizeObserver(updateScrollDistance);
+    observer.observe(pin);
+    observer.observe(track);
+    window.addEventListener("resize", updateScrollDistance);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateScrollDistance);
+    };
+  }, []);
 
   return (
     <>
       <style>{`
-        #services > .container.flow-inner {
+        #services > .container.flow-inner,
+        #services .scroll-reveal {
           transform: none !important;
           opacity: 1 !important;
+          filter: none !important;
         }
       `}</style>
 
-      <section className={styles.serviceShell} ref={targetRef}>
-        <div className={styles.servicePin}>
-          <motion.div className={styles.serviceTrack} style={{ x }}>
+      <section className={styles.serviceShell} ref={targetRef} style={shellStyle}>
+        <div className={styles.servicePin} ref={pinRef}>
+          <motion.div className={styles.serviceTrack} ref={trackRef} style={{ x }}>
             <article className={`${styles.serviceFeature} ${styles.serviceSlide}`}>
               <div className={styles.serviceFeatureCopy}>
                 <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
