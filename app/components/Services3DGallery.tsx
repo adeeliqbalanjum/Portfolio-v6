@@ -18,10 +18,6 @@ type ScrollProgressRef = {
   current: number;
 };
 
-const DEPTH_RANGE = 38;
-const CARD_COUNT = 12;
-const SCROLL_LOOPS = 2.45;
-
 const premiumServices: PremiumService[] = [
   {
     label: "01 / BUILD",
@@ -119,7 +115,7 @@ function createServiceTexture(service: PremiumService, index: number) {
 
   const dark = ctx.createLinearGradient(0, 0, 1280, 900);
   dark.addColorStop(0, "#070707");
-  dark.addColorStop(0.42, "#121212");
+  dark.addColorStop(0.45, "#121212");
   dark.addColorStop(1, "#050505");
   ctx.fillStyle = dark;
   ctx.fillRect(0, 0, 1280, 900);
@@ -132,7 +128,7 @@ function createServiceTexture(service: PremiumService, index: number) {
   ctx.fillRect(0, 0, 1280, 900);
 
   const glowB = ctx.createRadialGradient(1120, 780, 20, 1120, 780, 720);
-  glowB.addColorStop(0, "rgba(255,255,255,.24)");
+  glowB.addColorStop(0, "rgba(255,255,255,.20)");
   glowB.addColorStop(0.46, `${service.accent}26`);
   glowB.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = glowB;
@@ -141,6 +137,7 @@ function createServiceTexture(service: PremiumService, index: number) {
   ctx.save();
   drawRoundRect(ctx, 52, 52, 1176, 796, 56);
   ctx.clip();
+
   ctx.fillStyle = "rgba(255,255,255,.055)";
   ctx.fillRect(52, 52, 1176, 796);
 
@@ -149,7 +146,7 @@ function createServiceTexture(service: PremiumService, index: number) {
   drawRoundRect(ctx, 52, 52, 1176, 796, 56);
   ctx.stroke();
 
-  ctx.strokeStyle = `${service.accent}70`;
+  ctx.strokeStyle = `${service.accent}58`;
   ctx.lineWidth = 2;
   for (let i = 0; i < 12; i += 1) {
     const offset = i * 122;
@@ -159,43 +156,34 @@ function createServiceTexture(service: PremiumService, index: number) {
     ctx.stroke();
   }
 
+  ctx.save();
+  ctx.globalAlpha = 0.12;
+  ctx.fillStyle = service.accent;
+  ctx.font = "950 290px Arial, sans-serif";
+  ctx.fillText(`0${index + 1}`, 820, 780);
+  ctx.restore();
+
   ctx.fillStyle = "rgba(255,255,255,.10)";
-  drawRoundRect(ctx, 94, 94, 250, 62, 31);
+  drawRoundRect(ctx, 94, 94, 270, 62, 31);
   ctx.fill();
   ctx.fillStyle = service.accent;
   ctx.font = "800 28px Arial, sans-serif";
   ctx.fillText(service.label, 124, 136);
 
-  ctx.fillStyle = "rgba(255,255,255,.92)";
-  ctx.font = "950 104px Arial, sans-serif";
-  wrapText(ctx, service.title, 94, 330, 720, 104);
+  ctx.fillStyle = "rgba(255,255,255,.94)";
+  ctx.font = "950 98px Arial, sans-serif";
+  wrapText(ctx, service.title, 94, 322, 790, 100);
 
-  ctx.fillStyle = "rgba(255,255,255,.66)";
-  ctx.font = "600 35px Arial, sans-serif";
-  wrapText(ctx, service.copy, 100, 584, 760, 48);
+  ctx.fillStyle = "rgba(255,255,255,.68)";
+  ctx.font = "600 34px Arial, sans-serif";
+  wrapText(ctx, service.copy, 100, 586, 780, 48);
 
   ctx.fillStyle = "rgba(255,255,255,.12)";
   drawRoundRect(ctx, 94, 738, 620, 78, 39);
   ctx.fill();
-  ctx.fillStyle = "rgba(255,255,255,.82)";
+  ctx.fillStyle = "rgba(255,255,255,.84)";
   ctx.font = "800 30px Arial, sans-serif";
   ctx.fillText(service.stack, 128, 789);
-
-  ctx.fillStyle = service.accent;
-  ctx.globalAlpha = 0.95;
-  ctx.font = "950 300px Arial, sans-serif";
-  ctx.fillText(`0${index + 1}`, 838, 796);
-  ctx.globalAlpha = 1;
-
-  ctx.fillStyle = "rgba(255,255,255,.08)";
-  ctx.beginPath();
-  ctx.arc(1050, 210, 132, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = `${service.accent}8a`;
-  ctx.lineWidth = 8;
-  ctx.beginPath();
-  ctx.arc(1050, 210, 94, -0.7, Math.PI * 1.52);
-  ctx.stroke();
 
   ctx.restore();
 
@@ -204,14 +192,6 @@ function createServiceTexture(service: PremiumService, index: number) {
   texture.anisotropy = 8;
   texture.needsUpdate = true;
   return texture;
-}
-
-function wrappedModulo(value: number, length: number) {
-  return ((value % length) + length) % length;
-}
-
-function wrappedIndex(value: number, length: number) {
-  return ((value % length) + length) % length;
 }
 
 function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
@@ -224,71 +204,32 @@ function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
       .filter((texture): texture is THREE.CanvasTexture => Boolean(texture));
   }, []);
 
-  const positions = useMemo(
-    () => [
-      { x: -1.2, y: 0.12 },
-      { x: 2.1, y: 0.82 },
-      { x: -2.4, y: -0.92 },
-      { x: 1.3, y: -1.25 },
-      { x: 0.15, y: 1.12 },
-      { x: -1.9, y: 0.62 },
-      { x: 2.55, y: -0.55 },
-      { x: -0.1, y: -1.35 },
-      { x: 1.75, y: 1.0 },
-      { x: -2.65, y: -0.1 },
-      { x: 0.9, y: -0.9 },
-      { x: -0.75, y: 0.95 },
-    ],
-    []
-  );
-
-  const planes = useMemo(
-    () =>
-      Array.from({ length: CARD_COUNT }, (_, index) => ({
-        baseZ: (index / CARD_COUNT) * DEPTH_RANGE,
-        imageIndex: index % premiumServices.length,
-        x: positions[index]?.x ?? 0,
-        y: positions[index]?.y ?? 0,
-      })),
-    [positions]
-  );
-
   useEffect(() => {
     return () => textures.forEach((texture) => texture.dispose());
   }, [textures]);
 
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime();
-    const scrollDepth = progressRef.current * DEPTH_RANGE * SCROLL_LOOPS;
+  useFrame(() => {
+    const activeStep = progressRef.current * (premiumServices.length - 1);
 
-    planes.forEach((plane, index) => {
-      const rawZ = plane.baseZ + scrollDepth;
-      const wrappedZ = wrappedModulo(rawZ, DEPTH_RANGE);
-      const loopOffset = Math.floor(rawZ / DEPTH_RANGE);
-      const imageIndex = wrappedIndex(plane.imageIndex + loopOffset, premiumServices.length);
-
+    premiumServices.forEach((_, index) => {
       const mesh = meshRefs.current[index];
       if (!mesh) return;
 
-      const worldZ = 5.2 - wrappedZ;
-      const progress = wrappedZ / DEPTH_RANGE;
-      const centerWeight = 1 - Math.abs(progress - 0.18) / 0.46;
-      const opacity = THREE.MathUtils.clamp(centerWeight, 0, 1);
-      const scale = THREE.MathUtils.lerp(0.74, 1.08, opacity);
+      const local = index - activeStep;
+      const distanceFromActive = Math.abs(local);
+      const visibility = THREE.MathUtils.clamp(1.08 - distanceFromActive * 0.56, 0, 1);
+      const focus = THREE.MathUtils.clamp(1 - distanceFromActive, 0, 1);
 
-      mesh.position.set(plane.x, plane.y, worldZ);
-      mesh.rotation.x = Math.sin(time * 0.28 + index) * 0.035;
-      mesh.rotation.y = Math.sin(time * 0.42 + index * 1.7) * 0.08;
-      mesh.rotation.z = Math.sin(time * 0.2 + index * 0.8) * 0.025;
-      mesh.scale.setScalar(scale);
+      mesh.position.x = 0.82 + local * 0.16;
+      mesh.position.y = -local * 2.38;
+      mesh.position.z = 1.45 - distanceFromActive * 1.55;
+      mesh.rotation.x = THREE.MathUtils.clamp(local * -0.09, -0.16, 0.16);
+      mesh.rotation.y = THREE.MathUtils.clamp(local * 0.11, -0.18, 0.18);
+      mesh.rotation.z = 0;
+      mesh.scale.setScalar(THREE.MathUtils.lerp(0.86, 1.08, focus));
 
       const material = mesh.material as THREE.MeshBasicMaterial;
-      const nextTexture = textures[imageIndex];
-      if (nextTexture && material.map !== nextTexture) {
-        material.map = nextTexture;
-        material.needsUpdate = true;
-      }
-      material.opacity = opacity;
+      material.opacity = visibility;
     });
   });
 
@@ -296,21 +237,22 @@ function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
 
   return (
     <group>
-      {planes.map((plane, index) => (
+      {premiumServices.map((service, index) => (
         <mesh
-          key={index}
+          key={service.title}
           ref={(mesh) => {
             meshRefs.current[index] = mesh;
           }}
-          position={[plane.x, plane.y, 5.2 - plane.baseZ]}
+          position={[0.82, -index * 2.38, 1.45 - index * 1.55]}
         >
-          <planeGeometry args={[5.5, 3.86, 18, 12]} />
+          <planeGeometry args={[5.7, 4.0, 18, 12]} />
           <meshBasicMaterial
-            map={textures[plane.imageIndex]}
+            map={textures[index]}
             transparent
-            opacity={0}
+            opacity={index === 0 ? 1 : 0}
             toneMapped={false}
             side={THREE.DoubleSide}
+            depthWrite={false}
           />
         </mesh>
       ))}
@@ -343,7 +285,7 @@ export default function Services3DGallery() {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 95, damping: 28, mass: 0.35 });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 85, damping: 32, mass: 0.42 });
 
   useMotionValueEvent(smoothProgress, "change", (latest) => {
     progressRef.current = latest;
@@ -375,15 +317,13 @@ export default function Services3DGallery() {
 
         <div className={styles.overlay}>
           <span>Premium service experience</span>
-          <h2>Scroll-driven 3D services for serious business websites.</h2>
-          <p>
-            A new isolated WebGL section that presents your WordPress services as floating premium cards. The cards now move from normal page scroll, not click-drag.
-          </p>
+          <h2>Services built for serious business websites.</h2>
+          <p>Scroll slowly. Each card moves up into the same focused position, one service at a time.</p>
         </div>
 
         <div className={styles.instructions}>
-          <strong>Scroll the page to navigate</strong>
-          <span>No click or drag needed</span>
+          <strong>Scroll to change cards</strong>
+          <span>One service card at a time</span>
         </div>
       </div>
     </section>
