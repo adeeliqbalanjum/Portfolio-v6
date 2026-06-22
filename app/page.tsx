@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextRevealByWord } from "./components/TextReveal";
 import { ZoomParallax, ParallaxItem } from "./components/ZoomParallax";
 import { TextRotate } from "./components/TextRotate";
+import ServicesCarousel from "./components/ServicesCarousel";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -436,19 +437,11 @@ export default function Home() {
         <div className="container flow-inner">
           <div className="section-head scroll-reveal">
             <div className="eyebrow">Services</div>
-            <h2>Clear offers for business clients</h2>
-            <p>Every service is packaged around what clients actually need: clean UI, responsive pages, working features, and measurable quality.</p>
+            <h2>Services built for serious business websites</h2>
+            <p>I help businesses launch fast, responsive, editable WordPress websites with clean design, working functionality, and reliable handover.</p>
           </div>
 
-          <div className="services-grid">
-            {services.map((service) => (
-              <article className="service-card scroll-reveal" key={service.title}>
-                <h3>{service.title}</h3>
-                <p>{service.copy}</p>
-                <span>{service.deliverable}</span>
-              </article>
-            ))}
-          </div>
+          <ServicesCarousel />
         </div>
       </section>
 
