@@ -7,7 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextRevealByWord } from "./components/TextReveal";
 import { ZoomParallax, ParallaxItem } from "./components/ZoomParallax";
 import { TextRotate } from "./components/TextRotate";
-import ServicesCarousel from "./components/ServicesCarousel";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -375,17 +374,6 @@ export default function Home() {
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="section flow-section portfolio-section" id="services">
-        <div className="container flow-inner">
-          <div className="section-head scroll-reveal">
-            <div className="eyebrow">Services</div>
-            <h2>Services built for serious business websites</h2>
-            <p>I help businesses launch fast, responsive, editable WordPress websites with clean design, working functionality, and reliable handover.</p>
-          </div>
-          <ServicesCarousel />
         </div>
       </section>
 
