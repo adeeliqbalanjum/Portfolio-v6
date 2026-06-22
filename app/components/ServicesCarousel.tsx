@@ -52,58 +52,92 @@ const services = [
 
 export default function ServicesCarousel() {
   return (
-    <div className={styles.serviceShell}>
-      <div className={`${styles.serviceFeature} scroll-reveal`}>
-        <div className={styles.serviceFeatureCopy}>
-          <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
-          <h3>Design quality, WordPress functionality, and clean handover in one build.</h3>
-          <p>
-            This section now sells outcomes instead of only listing tools. It shows clients that you can handle the full website workflow: design conversion, responsive build, custom logic, speed, QA, and launch support.
-          </p>
-        </div>
+    <>
+      <style>{`
+        #services {
+          position: relative;
+          overflow: hidden;
+          background:
+            radial-gradient(circle at 0% 0%, rgba(125, 211, 252, .30), transparent 42%),
+            radial-gradient(circle at 100% 0%, rgba(134, 239, 172, .30), transparent 44%),
+            radial-gradient(circle at 50% 100%, rgba(255, 255, 255, .58), transparent 54%),
+            linear-gradient(135deg, rgba(255, 255, 255, .48), rgba(255, 255, 255, .22));
+          border-top: 1px solid rgba(255, 255, 255, .55);
+          border-bottom: 1px solid rgba(255, 255, 255, .55);
+        }
 
-        <div className={styles.serviceFeatureActions}>
-          <div className={styles.serviceProofGrid}>
-            <div className={styles.serviceProofPill}>Editable build <span>Elementor Pro</span></div>
-            <div className={styles.serviceProofPill}>Custom logic <span>PHP / ACF / CPT</span></div>
-            <div className={styles.serviceProofPill}>Launch ready <span>Speed + QA</span></div>
+        #services::before {
+          content: "";
+          position: absolute;
+          inset: -18% -8% -12%;
+          z-index: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(circle at 8% 8%, rgba(125, 211, 252, .28), transparent 45%),
+            radial-gradient(circle at 92% 12%, rgba(134, 239, 172, .25), transparent 42%),
+            radial-gradient(circle at 50% 90%, rgba(255, 255, 255, .55), transparent 52%);
+          filter: blur(10px);
+        }
+
+        #services > .container {
+          position: relative;
+          z-index: 1;
+        }
+      `}</style>
+
+      <div className={styles.serviceShell}>
+        <div className={`${styles.serviceFeature} scroll-reveal`}>
+          <div className={styles.serviceFeatureCopy}>
+            <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
+            <h3>Design quality, WordPress functionality, and clean handover in one build.</h3>
+            <p>
+              This section now sells outcomes instead of only listing tools. It shows clients that you can handle the full website workflow: design conversion, responsive build, custom logic, speed, QA, and launch support.
+            </p>
           </div>
-          <a href="#contact" className="btn btn-dark">Start a project →</a>
-        </div>
-      </div>
 
-      <div className={`${styles.serviceCarousel} scroll-reveal`} aria-label="Client-focused WordPress services carousel">
-        <div className={`${styles.serviceFade} ${styles.serviceFadeLeft}`} aria-hidden="true" />
-        <div className={`${styles.serviceFade} ${styles.serviceFadeRight}`} aria-hidden="true" />
-
-        <div className={styles.serviceTrack}>
-          {[0, 1].map((group) => (
-            <div className={styles.serviceGroup} key={group} aria-hidden={group === 1}>
-              {services.map((service) => (
-                <article className={styles.serviceCard} key={`${group}-${service.title}`}>
-                  <div className={styles.serviceCardTop}>
-                    <small className={styles.serviceNumber}>{service.label}</small>
-                    <span className={styles.serviceProof}>{service.proof}</span>
-                  </div>
-
-                  <div className={styles.serviceIcon}>{service.icon}</div>
-                  <h3>{service.title}</h3>
-                  <p>{service.copy}</p>
-
-                  <div className={styles.serviceIncludes}>
-                    <strong>Includes</strong>
-                    <span>{service.deliverable}</span>
-                  </div>
-
-                  <span className={styles.serviceFit}>{service.fit} →</span>
-                </article>
-              ))}
+          <div className={styles.serviceFeatureActions}>
+            <div className={styles.serviceProofGrid}>
+              <div className={styles.serviceProofPill}>Editable build <span>Elementor Pro</span></div>
+              <div className={styles.serviceProofPill}>Custom logic <span>PHP / ACF / CPT</span></div>
+              <div className={styles.serviceProofPill}>Launch ready <span>Speed + QA</span></div>
             </div>
-          ))}
+            <a href="#contact" className="btn btn-dark">Start a project →</a>
+          </div>
         </div>
-      </div>
 
-      <p className={styles.serviceMobileHint}>Swipe services →</p>
-    </div>
+        <div className={`${styles.serviceCarousel} scroll-reveal`} aria-label="Client-focused WordPress services carousel">
+          <div className={`${styles.serviceFade} ${styles.serviceFadeLeft}`} aria-hidden="true" />
+          <div className={`${styles.serviceFade} ${styles.serviceFadeRight}`} aria-hidden="true" />
+
+          <div className={styles.serviceTrack}>
+            {[0, 1].map((group) => (
+              <div className={styles.serviceGroup} key={group} aria-hidden={group === 1}>
+                {services.map((service) => (
+                  <article className={styles.serviceCard} key={`${group}-${service.title}`}>
+                    <div className={styles.serviceCardTop}>
+                      <small className={styles.serviceNumber}>{service.label}</small>
+                      <span className={styles.serviceProof}>{service.proof}</span>
+                    </div>
+
+                    <div className={styles.serviceIcon}>{service.icon}</div>
+                    <h3>{service.title}</h3>
+                    <p>{service.copy}</p>
+
+                    <div className={styles.serviceIncludes}>
+                      <strong>Includes</strong>
+                      <span>{service.deliverable}</span>
+                    </div>
+
+                    <span className={styles.serviceFit}>{service.fit} →</span>
+                  </article>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className={styles.serviceMobileHint}>Swipe services →</p>
+      </div>
+    </>
   );
 }
