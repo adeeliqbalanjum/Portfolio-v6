@@ -1,7 +1,7 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef, useState } from "react";
-import { motion, useScroll, useSpring, useTransform } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import styles from "../services.module.css";
 
 const services = [
@@ -45,7 +45,7 @@ const services = [
     label: "05 — OPTIMIZE",
     title: "Speed & Technical Fixes",
     copy: "Performance cleanup, mobile bug fixing, plugin conflict checks, Core Web Vitals improvements, and WordPress troubleshooting.",
-    deliverable: "Cache setup, image optimization, layout fixes, plugin audit, technical QA.",
+    deliverable: "Cache setup, image optimization, plugin audit, technical QA.",
     proof: "Faster UX",
     fit: "Best for slow websites",
     icon: "⚡",
@@ -53,46 +53,9 @@ const services = [
 ];
 
 export default function ServicesCarousel() {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [distance, setDistance] = useState(0);
-
-  const { scrollYProgress } = useScroll({
-    target: rootRef,
-    offset: ["start start", "end end"],
-  });
-
-  const rawX = useTransform(scrollYProgress, [0, 1], [0, -distance]);
-  const x = useSpring(rawX, { stiffness: 90, damping: 28, mass: 0.35 });
-  const shellStyle = {
-    "--service-scroll-distance": `${distance}px`,
-  } as CSSProperties;
-
-  useEffect(() => {
-    const pin = pinRef.current;
-    const track = trackRef.current;
-
-    if (!pin || !track) return undefined;
-
-    const updateDistance = () => {
-      const isDesktop = window.matchMedia("(min-width: 901px)").matches;
-      const nextDistance = isDesktop ? Math.max(0, track.scrollWidth - pin.clientWidth) : 0;
-      setDistance(nextDistance);
-    };
-
-    updateDistance();
-
-    const resizeObserver = new ResizeObserver(updateDistance);
-    resizeObserver.observe(pin);
-    resizeObserver.observe(track);
-    window.addEventListener("resize", updateDistance);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", updateDistance);
-    };
-  }, []);
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start start", "end end"] });
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-83.333%"]);
 
   return (
     <>
@@ -103,9 +66,9 @@ export default function ServicesCarousel() {
         }
       `}</style>
 
-      <div className={styles.serviceShell} ref={rootRef} style={shellStyle}>
-        <div className={styles.servicePin} ref={pinRef}>
-          <motion.div className={styles.serviceTrack} ref={trackRef} style={{ x }}>
+      <section className={styles.serviceShell} ref={targetRef}>
+        <div className={styles.servicePin}>
+          <motion.div className={styles.serviceTrack} style={{ x }}>
             <article className={`${styles.serviceFeature} ${styles.serviceSlide}`}>
               <div className={styles.serviceFeatureCopy}>
                 <span className={styles.serviceFeatureKicker}>Client-attracting offer stack</span>
@@ -150,7 +113,7 @@ export default function ServicesCarousel() {
             ))}
           </motion.div>
         </div>
-      </div>
+      </section>
     </>
   );
 }
