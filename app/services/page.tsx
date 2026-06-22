@@ -60,22 +60,27 @@ export default function ServicesPage() {
     <main className={styles.page}>
       <section className={styles.hero}>
         <div className={styles.heroInner}>
-          <span className={styles.pill}>Services vertical scroll</span>
-          <h1>Services built for serious business websites</h1>
+          <span className={styles.pill}>Services vertical scroll previews</span>
+          <h1>Choose the style before we push it live</h1>
           <p>
-            Premium WordPress services presented in the same Option 1 Stats Glow Glass style: blue/green glow,
-            soft glass cards, clean white surfaces, and vertical sticky card flow.
+            Option 1 keeps the service content and uses vertical scroll: card 1, then card 2, then card 3,
+            then card 4, then card 5, and only after that the page continues.
           </p>
         </div>
       </section>
 
-      <section className={styles.preview}>
+      <nav className={styles.quickNav} aria-label="Services page quick navigation">
+        <a href="#option-1">Option 1</a>
+      </nav>
+
+      <section className={styles.preview} id="option-1">
         <div className={styles.previewInner}>
           <aside className={styles.previewHead}>
             <span className={styles.optionLabel}>Option 1 — recommended</span>
             <h2>Stats Glow Glass</h2>
             <p className={styles.previewDesc}>
-              Blue/green glow, soft glass cards, clean white surfaces, and calm premium spacing matched to the current homepage.
+              Closest to the section you liked: blue/green glow, soft glass cards, clean white surfaces,
+              and calm premium spacing.
             </p>
             <div className={styles.approvalNote}>
               <span>Background <b>Same blue/green glow</b></span>
