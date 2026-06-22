@@ -6,16 +6,15 @@
   --cyan: #7dd3fc;
   --line: rgba(7, 7, 7, .075);
   min-height: 100vh;
-  overflow-x: clip;
   background: var(--bg);
   color: var(--ink);
 }
 
 .hero {
-  min-height: 64vh;
+  min-height: 72vh;
   display: grid;
   place-items: center;
-  padding: clamp(120px, 14vw, 180px) 24px 88px;
+  padding: 70px 24px;
   text-align: center;
   background:
     radial-gradient(circle at 16% 0%, rgba(125, 211, 252, .22), transparent 34%),
@@ -24,7 +23,7 @@
 }
 
 .heroInner {
-  width: min(900px, 100%);
+  width: min(880px, 100%);
 }
 
 .pill,
@@ -62,7 +61,7 @@
 }
 
 .hero p {
-  max-width: 640px;
+  max-width: 620px;
   margin: 24px auto 0;
   color: rgba(7, 7, 7, .52);
   font-size: 18px;
@@ -73,7 +72,7 @@
 .preview {
   position: relative;
   padding: 120px 24px 160px;
-  overflow: clip;
+  overflow: visible;
   border-top: 1px solid rgba(255, 255, 255, .72);
   background:
     radial-gradient(circle at 0% 0%, rgba(125, 211, 252, .30), transparent 42%),
@@ -85,7 +84,7 @@
 .preview::before {
   content: "";
   position: absolute;
-  inset: -12% -10%;
+  inset: 0;
   background:
     radial-gradient(circle at 8% 10%, rgba(125, 211, 252, .28), transparent 45%),
     radial-gradient(circle at 92% 8%, rgba(134, 239, 172, .25), transparent 42%),
@@ -108,6 +107,7 @@
 .previewHead {
   position: sticky;
   top: 92px;
+  align-self: start;
   min-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
@@ -171,11 +171,13 @@
   display: grid;
   gap: 90px;
   padding-block: 20px 120px;
+  align-items: start;
 }
 
 .serviceCard {
   position: sticky;
   top: 104px;
+  align-self: start;
   min-height: 500px;
   border-radius: 34px;
   padding: 34px;
@@ -304,11 +306,6 @@
 }
 
 @media (max-width: 900px) {
-  .hero {
-    min-height: 54vh;
-    padding-top: 110px;
-  }
-
   .previewInner {
     grid-template-columns: 1fr;
     gap: 28px;
