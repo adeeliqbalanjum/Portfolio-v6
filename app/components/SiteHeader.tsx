@@ -10,6 +10,7 @@ export function SiteHeader() {
       </Link>
       <Link href="/">Home</Link>
       <Link href="/portfolio">Portfolio</Link>
+      <Link href="/services">Services</Link>
       <Link href="/#about">About</Link>
       <Link href="/#projects">Projects</Link>
       <Link href="/#contact" className="nav-cta">Hire Me</Link>
