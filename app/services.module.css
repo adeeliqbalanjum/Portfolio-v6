@@ -1,10 +1,10 @@
 .serviceShell {
   position: relative;
-  overflow: hidden;
+  overflow: clip;
   isolation: isolate;
   width: 100vw;
-  height: 420vh;
-  min-height: 3200px;
+  height: calc(var(--service-scroll-distance, 0px) + 100svh);
+  min-height: 100svh;
   margin-top: 36px;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -21,7 +21,7 @@
   content: "";
   position: absolute;
   left: 50%;
-  top: 26%;
+  top: 50%;
   width: min(980px, 94vw);
   height: min(980px, 94vw);
   border-radius: 50%;
@@ -46,9 +46,9 @@
 
 .servicePin {
   position: sticky;
-  top: 92px;
+  top: 0;
   width: 100vw;
-  height: calc(100vh - 92px);
+  height: 100svh;
   min-height: 620px;
   display: flex;
   align-items: center;
@@ -72,7 +72,7 @@
   display: grid;
   grid-template-columns: 1.18fr .82fr;
   gap: 18px;
-  min-height: min(560px, calc(100vh - 190px));
+  min-height: min(560px, calc(100svh - 190px));
   padding: 30px;
   border-radius: 34px;
   overflow: hidden;
@@ -91,15 +91,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .30) 45%, transparent 68%);
-  transform: translateX(-75%);
-  animation: featureShine 6s ease-in-out infinite;
   pointer-events: none;
-}
-
-@keyframes featureShine {
-  0%, 48% { transform: translateX(-78%); opacity: 0; }
-  58% { opacity: .42; }
-  76%, 100% { transform: translateX(78%); opacity: 0; }
 }
 
 .serviceFeatureCopy,
@@ -189,7 +181,7 @@
 }
 
 .serviceCard {
-  min-height: min(560px, calc(100vh - 190px));
+  min-height: min(560px, calc(100svh - 190px));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -202,7 +194,7 @@
     rgba(255, 255, 255, .78);
   border: 1px solid rgba(0, 0, 0, .055);
   box-shadow: 0 28px 90px rgba(0, 0, 0, .105);
-  transition: transform .32s cubic-bezier(.2, .8, .2, 1), box-shadow .32s cubic-bezier(.2, .8, .2, 1), background .32s ease;
+  transition: box-shadow .32s cubic-bezier(.2, .8, .2, 1), background .32s ease;
   backdrop-filter: blur(16px);
   isolation: isolate;
 }
@@ -221,7 +213,6 @@
 }
 
 .serviceCard:hover {
-  transform: translateY(-6px) scale(1.004);
   background:
     radial-gradient(circle at 0% 0%, rgba(125, 211, 252, .20), transparent 36%),
     radial-gradient(circle at 100% 0%, rgba(134, 239, 172, .18), transparent 36%),
@@ -450,12 +441,5 @@
   .serviceCardIndex {
     right: 22px;
     bottom: 20px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .serviceFeature::after,
-  .serviceShell::before {
-    animation: none;
   }
 }
