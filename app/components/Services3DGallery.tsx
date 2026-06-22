@@ -1,7 +1,8 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useMotionValueEvent, useScroll, useSpring } from "motion/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import styles from "../services3d.module.css";
 
@@ -12,6 +13,14 @@ type PremiumService = {
   stack: string;
   accent: string;
 };
+
+type ScrollProgressRef = {
+  current: number;
+};
+
+const DEPTH_RANGE = 38;
+const CARD_COUNT = 12;
+const SCROLL_LOOPS = 2.45;
 
 const premiumServices: PremiumService[] = [
   {
@@ -197,13 +206,16 @@ function createServiceTexture(service: PremiumService, index: number) {
   return texture;
 }
 
-function GalleryScene({ active }: { active: boolean }) {
-  const { gl } = useThree();
+function wrappedModulo(value: number, length: number) {
+  return ((value % length) + length) % length;
+}
+
+function wrappedIndex(value: number, length: number) {
+  return ((value % length) + length) % length;
+}
+
+function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
   const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
-  const velocity = useRef(0.35);
-  const lastInteraction = useRef(Date.now());
-  const dragging = useRef(false);
-  const lastPointerY = useRef(0);
 
   const textures = useMemo(() => {
     if (typeof document === "undefined") return [];
@@ -230,101 +242,36 @@ function GalleryScene({ active }: { active: boolean }) {
     []
   );
 
-  const planes = useRef(
-    Array.from({ length: 12 }, (_, index) => ({
-      z: (index / 12) * 38,
-      imageIndex: index % premiumServices.length,
-      x: positions[index]?.x ?? 0,
-      y: positions[index]?.y ?? 0,
-    }))
+  const planes = useMemo(
+    () =>
+      Array.from({ length: CARD_COUNT }, (_, index) => ({
+        baseZ: (index / CARD_COUNT) * DEPTH_RANGE,
+        imageIndex: index % premiumServices.length,
+        x: positions[index]?.x ?? 0,
+        y: positions[index]?.y ?? 0,
+      })),
+    [positions]
   );
-
-  const interact = useCallback((amount: number) => {
-    velocity.current += amount;
-    lastInteraction.current = Date.now();
-  }, []);
 
   useEffect(() => {
     return () => textures.forEach((texture) => texture.dispose());
   }, [textures]);
 
-  useEffect(() => {
-    const canvas = gl.domElement;
-
-    const handleWheel = (event: WheelEvent) => {
-      interact(event.deltaY * 0.0022);
-    };
-
-    const handlePointerDown = (event: PointerEvent) => {
-      dragging.current = true;
-      lastPointerY.current = event.clientY;
-      canvas.setPointerCapture?.(event.pointerId);
-    };
-
-    const handlePointerMove = (event: PointerEvent) => {
-      if (!dragging.current) return;
-      const delta = lastPointerY.current - event.clientY;
-      lastPointerY.current = event.clientY;
-      interact(delta * 0.018);
-    };
-
-    const handlePointerUp = (event: PointerEvent) => {
-      dragging.current = false;
-      canvas.releasePointerCapture?.(event.pointerId);
-    };
-
-    canvas.addEventListener("wheel", handleWheel, { passive: true });
-    canvas.addEventListener("pointerdown", handlePointerDown);
-    canvas.addEventListener("pointermove", handlePointerMove);
-    canvas.addEventListener("pointerup", handlePointerUp);
-    canvas.addEventListener("pointercancel", handlePointerUp);
-
-    return () => {
-      canvas.removeEventListener("wheel", handleWheel);
-      canvas.removeEventListener("pointerdown", handlePointerDown);
-      canvas.removeEventListener("pointermove", handlePointerMove);
-      canvas.removeEventListener("pointerup", handlePointerUp);
-      canvas.removeEventListener("pointercancel", handlePointerUp);
-    };
-  }, [gl, interact]);
-
-  useEffect(() => {
-    if (!active) return undefined;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowDown" || event.key === "ArrowRight") interact(0.9);
-      if (event.key === "ArrowUp" || event.key === "ArrowLeft") interact(-0.9);
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [active, interact]);
-
-  useFrame((state, delta) => {
+  useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    const shouldAutoPlay = Date.now() - lastInteraction.current > 3000;
+    const scrollDepth = progressRef.current * DEPTH_RANGE * SCROLL_LOOPS;
 
-    if (shouldAutoPlay) velocity.current += 0.10 * delta;
-    velocity.current *= 0.94;
-
-    planes.current.forEach((plane, index) => {
-      plane.z += velocity.current * delta * 12;
-
-      if (plane.z >= 38) {
-        plane.z -= 38;
-        plane.imageIndex = (plane.imageIndex + 1) % premiumServices.length;
-      }
-
-      if (plane.z < 0) {
-        plane.z += 38;
-        plane.imageIndex = (plane.imageIndex - 1 + premiumServices.length) % premiumServices.length;
-      }
+    planes.forEach((plane, index) => {
+      const rawZ = plane.baseZ + scrollDepth;
+      const wrappedZ = wrappedModulo(rawZ, DEPTH_RANGE);
+      const loopOffset = Math.floor(rawZ / DEPTH_RANGE);
+      const imageIndex = wrappedIndex(plane.imageIndex + loopOffset, premiumServices.length);
 
       const mesh = meshRefs.current[index];
       if (!mesh) return;
 
-      const worldZ = 5.2 - plane.z;
-      const progress = plane.z / 38;
+      const worldZ = 5.2 - wrappedZ;
+      const progress = wrappedZ / DEPTH_RANGE;
       const centerWeight = 1 - Math.abs(progress - 0.18) / 0.46;
       const opacity = THREE.MathUtils.clamp(centerWeight, 0, 1);
       const scale = THREE.MathUtils.lerp(0.74, 1.08, opacity);
@@ -336,7 +283,7 @@ function GalleryScene({ active }: { active: boolean }) {
       mesh.scale.setScalar(scale);
 
       const material = mesh.material as THREE.MeshBasicMaterial;
-      const nextTexture = textures[plane.imageIndex];
+      const nextTexture = textures[imageIndex];
       if (nextTexture && material.map !== nextTexture) {
         material.map = nextTexture;
         material.needsUpdate = true;
@@ -349,13 +296,13 @@ function GalleryScene({ active }: { active: boolean }) {
 
   return (
     <group>
-      {planes.current.map((plane, index) => (
+      {planes.map((plane, index) => (
         <mesh
           key={index}
           ref={(mesh) => {
             meshRefs.current[index] = mesh;
           }}
-          position={[plane.x, plane.y, 5.2 - plane.z]}
+          position={[plane.x, plane.y, 5.2 - plane.baseZ]}
         >
           <planeGeometry args={[5.5, 3.86, 18, 12]} />
           <meshBasicMaterial
@@ -387,9 +334,20 @@ function WebGLFallback() {
 }
 
 export default function Services3DGallery() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const progressRef = useRef(0);
   const [mounted, setMounted] = useState(false);
-  const [active, setActive] = useState(false);
   const [webglSupported, setWebglSupported] = useState(true);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 95, damping: 28, mass: 0.35 });
+
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+    progressRef.current = latest;
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -404,17 +362,12 @@ export default function Services3DGallery() {
   }, []);
 
   return (
-    <section
-      className={styles.section}
-      id="services-3d"
-      onPointerEnter={() => setActive(true)}
-      onPointerLeave={() => setActive(false)}
-    >
+    <section className={styles.section} id="services-3d" ref={sectionRef}>
       <div className={styles.stage}>
         {mounted && webglSupported ? (
           <Canvas camera={{ position: [0, 0, 10], fov: 46 }} gl={{ antialias: true, alpha: true }}>
             <ambientLight intensity={1.4} />
-            <GalleryScene active={active} />
+            <GalleryScene progressRef={progressRef} />
           </Canvas>
         ) : (
           <WebGLFallback />
@@ -422,15 +375,15 @@ export default function Services3DGallery() {
 
         <div className={styles.overlay}>
           <span>Premium service experience</span>
-          <h2>Interactive 3D services for serious business websites.</h2>
+          <h2>Scroll-driven 3D services for serious business websites.</h2>
           <p>
-            A new isolated WebGL section that presents your WordPress services as floating premium cards. It does not replace or modify the existing Services section.
+            A new isolated WebGL section that presents your WordPress services as floating premium cards. The cards now move from normal page scroll, not click-drag.
           </p>
         </div>
 
         <div className={styles.instructions}>
-          <strong>Use mouse wheel, arrow keys, or touch</strong>
-          <span>Auto-play resumes after 3 seconds of inactivity</span>
+          <strong>Scroll the page to navigate</strong>
+          <span>No click or drag needed</span>
         </div>
       </div>
     </section>
