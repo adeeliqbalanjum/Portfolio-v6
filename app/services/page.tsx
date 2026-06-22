@@ -75,17 +75,19 @@ export default function ServicesPage() {
 
       <section className={styles.preview} id="option-1">
         <div className={styles.previewInner}>
-          <aside className={styles.previewHead}>
-            <span className={styles.optionLabel}>Option 1 — recommended</span>
-            <h2>Stats Glow Glass</h2>
-            <p className={styles.previewDesc}>
-              Closest to the section you liked: blue/green glow, soft glass cards, clean white surfaces,
-              and calm premium spacing.
-            </p>
-            <div className={styles.approvalNote}>
-              <span>Background <b>Same blue/green glow</b></span>
-              <span>Cards <b>White glass</b></span>
-              <span>Best for <b>Current homepage match</b></span>
+          <aside className={styles.previewHeadRail}>
+            <div className={styles.previewHead}>
+              <span className={styles.optionLabel}>Option 1 — recommended</span>
+              <h2>Stats Glow Glass</h2>
+              <p className={styles.previewDesc}>
+                Closest to the section you liked: blue/green glow, soft glass cards, clean white surfaces,
+                and calm premium spacing.
+              </p>
+              <div className={styles.approvalNote}>
+                <span>Background <b>Same blue/green glow</b></span>
+                <span>Cards <b>White glass</b></span>
+                <span>Best for <b>Current homepage match</b></span>
+              </div>
             </div>
           </aside>
 
