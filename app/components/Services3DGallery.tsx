@@ -115,7 +115,7 @@ function createServiceTexture(service: PremiumService, index: number) {
 
   const dark = ctx.createLinearGradient(0, 0, 1280, 900);
   dark.addColorStop(0, "#070707");
-  dark.addColorStop(0.45, "#121212");
+  dark.addColorStop(0.42, "#121212");
   dark.addColorStop(1, "#050505");
   ctx.fillStyle = dark;
   ctx.fillRect(0, 0, 1280, 900);
@@ -128,7 +128,7 @@ function createServiceTexture(service: PremiumService, index: number) {
   ctx.fillRect(0, 0, 1280, 900);
 
   const glowB = ctx.createRadialGradient(1120, 780, 20, 1120, 780, 720);
-  glowB.addColorStop(0, "rgba(255,255,255,.20)");
+  glowB.addColorStop(0, "rgba(255,255,255,.24)");
   glowB.addColorStop(0.46, `${service.accent}26`);
   glowB.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = glowB;
@@ -137,7 +137,6 @@ function createServiceTexture(service: PremiumService, index: number) {
   ctx.save();
   drawRoundRect(ctx, 52, 52, 1176, 796, 56);
   ctx.clip();
-
   ctx.fillStyle = "rgba(255,255,255,.055)";
   ctx.fillRect(52, 52, 1176, 796);
 
@@ -146,7 +145,7 @@ function createServiceTexture(service: PremiumService, index: number) {
   drawRoundRect(ctx, 52, 52, 1176, 796, 56);
   ctx.stroke();
 
-  ctx.strokeStyle = `${service.accent}58`;
+  ctx.strokeStyle = `${service.accent}70`;
   ctx.lineWidth = 2;
   for (let i = 0; i < 12; i += 1) {
     const offset = i * 122;
@@ -156,27 +155,26 @@ function createServiceTexture(service: PremiumService, index: number) {
     ctx.stroke();
   }
 
-  ctx.save();
-  ctx.globalAlpha = 0.12;
   ctx.fillStyle = service.accent;
-  ctx.font = "950 290px Arial, sans-serif";
-  ctx.fillText(`0${index + 1}`, 820, 780);
-  ctx.restore();
+  ctx.globalAlpha = 0.16;
+  ctx.font = "950 230px Arial, sans-serif";
+  ctx.fillText(`0${index + 1}`, 840, 760);
+  ctx.globalAlpha = 1;
 
   ctx.fillStyle = "rgba(255,255,255,.10)";
-  drawRoundRect(ctx, 94, 94, 270, 62, 31);
+  drawRoundRect(ctx, 94, 94, 250, 62, 31);
   ctx.fill();
   ctx.fillStyle = service.accent;
   ctx.font = "800 28px Arial, sans-serif";
   ctx.fillText(service.label, 124, 136);
 
   ctx.fillStyle = "rgba(255,255,255,.94)";
-  ctx.font = "950 98px Arial, sans-serif";
-  wrapText(ctx, service.title, 94, 322, 790, 100);
+  ctx.font = "950 92px Arial, sans-serif";
+  wrapText(ctx, service.title, 94, 316, 750, 94);
 
   ctx.fillStyle = "rgba(255,255,255,.68)";
   ctx.font = "600 34px Arial, sans-serif";
-  wrapText(ctx, service.copy, 100, 586, 780, 48);
+  wrapText(ctx, service.copy, 100, 586, 790, 48);
 
   ctx.fillStyle = "rgba(255,255,255,.12)";
   drawRoundRect(ctx, 94, 738, 620, 78, 39);
@@ -184,6 +182,16 @@ function createServiceTexture(service: PremiumService, index: number) {
   ctx.fillStyle = "rgba(255,255,255,.84)";
   ctx.font = "800 30px Arial, sans-serif";
   ctx.fillText(service.stack, 128, 789);
+
+  ctx.fillStyle = "rgba(255,255,255,.08)";
+  ctx.beginPath();
+  ctx.arc(1050, 210, 132, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = `${service.accent}8a`;
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.arc(1050, 210, 94, -0.7, Math.PI * 1.52);
+  ctx.stroke();
 
   ctx.restore();
 
@@ -208,28 +216,36 @@ function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
     return () => textures.forEach((texture) => texture.dispose());
   }, [textures]);
 
-  useFrame(() => {
-    const activeStep = progressRef.current * (premiumServices.length - 1);
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    const timeline = progressRef.current * (premiumServices.length - 1);
 
     premiumServices.forEach((_, index) => {
       const mesh = meshRefs.current[index];
       if (!mesh) return;
 
-      const local = index - activeStep;
-      const distanceFromActive = Math.abs(local);
-      const visibility = THREE.MathUtils.clamp(1.08 - distanceFromActive * 0.56, 0, 1);
-      const focus = THREE.MathUtils.clamp(1 - distanceFromActive, 0, 1);
+      const delta = index - timeline;
+      const distance = Math.abs(delta);
+      const activeWeight = THREE.MathUtils.clamp(1 - distance, 0, 1);
+      const nearWeight = THREE.MathUtils.clamp(1 - distance / 1.25, 0, 1);
+      const visibleWeight = THREE.MathUtils.clamp(1 - distance / 1.05, 0, 1);
 
-      mesh.position.x = 0.82 + local * 0.16;
-      mesh.position.y = -local * 2.38;
-      mesh.position.z = 1.45 - distanceFromActive * 1.55;
-      mesh.rotation.x = THREE.MathUtils.clamp(local * -0.09, -0.16, 0.16);
-      mesh.rotation.y = THREE.MathUtils.clamp(local * 0.11, -0.18, 0.18);
-      mesh.rotation.z = 0;
-      mesh.scale.setScalar(THREE.MathUtils.lerp(0.86, 1.08, focus));
+      const clampedDelta = THREE.MathUtils.clamp(delta, -1.35, 1.35);
+      const x = clampedDelta * 0.16;
+      const y = -clampedDelta * 3.25;
+      const z = THREE.MathUtils.lerp(-4.2, 2.6, nearWeight);
+      const scale = THREE.MathUtils.lerp(0.82, 1.08, activeWeight);
+
+      mesh.position.set(x, y, z);
+      mesh.rotation.x = THREE.MathUtils.lerp(0.26 * Math.sign(delta), 0, activeWeight);
+      mesh.rotation.y = Math.sin(time * 0.25 + index) * 0.025;
+      mesh.rotation.z = THREE.MathUtils.lerp(-0.08 * Math.sign(delta), 0, activeWeight);
+      mesh.scale.setScalar(scale);
+      mesh.renderOrder = Math.round(activeWeight * 1000);
 
       const material = mesh.material as THREE.MeshBasicMaterial;
-      material.opacity = visibility;
+      material.opacity = visibleWeight;
+      material.needsUpdate = true;
     });
   });
 
@@ -243,9 +259,9 @@ function GalleryScene({ progressRef }: { progressRef: ScrollProgressRef }) {
           ref={(mesh) => {
             meshRefs.current[index] = mesh;
           }}
-          position={[0.82, -index * 2.38, 1.45 - index * 1.55]}
+          position={[0, index === 0 ? 0 : -4, index === 0 ? 2.6 : -4.2]}
         >
-          <planeGeometry args={[5.7, 4.0, 18, 12]} />
+          <planeGeometry args={[5.35, 3.76, 18, 12]} />
           <meshBasicMaterial
             map={textures[index]}
             transparent
@@ -285,7 +301,7 @@ export default function Services3DGallery() {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 85, damping: 32, mass: 0.42 });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 70, damping: 24, mass: 0.45 });
 
   useMotionValueEvent(smoothProgress, "change", (latest) => {
     progressRef.current = latest;
@@ -307,7 +323,7 @@ export default function Services3DGallery() {
     <section className={styles.section} id="services-3d" ref={sectionRef}>
       <div className={styles.stage}>
         {mounted && webglSupported ? (
-          <Canvas camera={{ position: [0, 0, 10], fov: 46 }} gl={{ antialias: true, alpha: true }}>
+          <Canvas camera={{ position: [0, 0, 10], fov: 44 }} gl={{ antialias: true, alpha: true }}>
             <ambientLight intensity={1.4} />
             <GalleryScene progressRef={progressRef} />
           </Canvas>
@@ -317,13 +333,15 @@ export default function Services3DGallery() {
 
         <div className={styles.overlay}>
           <span>Premium service experience</span>
-          <h2>Services built for serious business websites.</h2>
-          <p>Scroll slowly. Each card moves up into the same focused position, one service at a time.</p>
+          <h2>One premium service card at a time.</h2>
+          <p>
+            Scroll slowly and each service moves into the same focused position, so the full card content stays readable before the next one arrives.
+          </p>
         </div>
 
         <div className={styles.instructions}>
-          <strong>Scroll to change cards</strong>
-          <span>One service card at a time</span>
+          <strong>Scroll the page to navigate</strong>
+          <span>Cards change one by one</span>
         </div>
       </div>
     </section>
