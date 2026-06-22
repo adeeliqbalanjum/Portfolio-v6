@@ -8,37 +8,37 @@ import { TextRevealByWord } from "./components/TextReveal";
 import { ZoomParallax, ParallaxItem } from "./components/ZoomParallax";
 import { TextRotate } from "./components/TextRotate";
 import ServicesCarousel from "./components/ServicesCarousel";
+import Services3DGallery from "./components/Services3DGallery";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ─── data ──────────────────────────────────────────────────── */
 const portraitDataUrl = "https://avatars.githubusercontent.com/u/178131381?v=4";
 
 const cards = [
-  ["Desert Safari Dubai",    "Custom booking plugin — tiered AED pricing, admin approvals & Telr payment.", "shape-a"],
-  ["Embassy of Pakistan",    "Official government website with real-time passport tracking system.",         "shape-b"],
-  ["FastDocNow",             "24/7 telehealth platform with HIPAA-compliant messaging & booking flow.",     "thumbs"],
-  ["Artisan Technologies",   "Smart home automation site — residential & commercial service split.",         "shape-c"],
-  ["Pacific Valor Law",      "VA disability attorney site for overseas veterans — Okinawa, Japan.",          "shape-d"],
-  ["Griffin Resources",      "HR outsourcing platform with lead-gen CTAs and consultation flow.",            "shape-a"],
-  ["Relocrate",              "Eco-friendly moving crate rental site for Denver, Colorado.",                  "shape-b"],
+  ["Desert Safari Dubai", "Custom booking plugin — tiered AED pricing, admin approvals & Telr payment.", "shape-a"],
+  ["Embassy of Pakistan", "Official government website with real-time passport tracking system.", "shape-b"],
+  ["FastDocNow", "24/7 telehealth platform with HIPAA-compliant messaging & booking flow.", "thumbs"],
+  ["Artisan Technologies", "Smart home automation site — residential & commercial service split.", "shape-c"],
+  ["Pacific Valor Law", "VA disability attorney site for overseas veterans — Okinawa, Japan.", "shape-d"],
+  ["Griffin Resources", "HR outsourcing platform with lead-gen CTAs and consultation flow.", "shape-a"],
+  ["Relocrate", "Eco-friendly moving crate rental site for Denver, Colorado.", "shape-b"],
 ];
 
 const stats = [
-  ["3+",      "Years WordPress",    "Hands-on WordPress, WooCommerce & Elementor Pro for international clients."],
-  ["50+",     "Projects Delivered", "Business, e-commerce, education & custom WordPress builds delivered."],
-  ["20+",     "Figma Builds",       "Figma & PSD designs converted into responsive, pixel-perfect WordPress sites."],
-  ["6s→1.8s", "Speed Result",       "Load-time cuts via cache, image optimisation, plugin auditing & Core Web Vitals."],
+  ["3+", "Years WordPress", "Hands-on WordPress, WooCommerce & Elementor Pro for international clients."],
+  ["50+", "Projects Delivered", "Business, e-commerce, education & custom WordPress builds delivered."],
+  ["20+", "Figma Builds", "Figma & PSD designs converted into responsive, pixel-perfect WordPress sites."],
+  ["6s→1.8s", "Speed Result", "Load-time cuts via cache, image optimisation, plugin auditing & Core Web Vitals."],
 ];
 
 const parallaxItems: ParallaxItem[] = [
-  { label: "Desert Safari Dubai",  sub: "Custom Booking Plugin",  gradient: "linear-gradient(135deg,rgba(255,122,24,.96),rgba(255,214,74,.82))"  },
-  { label: "Embassy of Pakistan",  sub: "Government Website",     gradient: "linear-gradient(135deg,rgba(168,85,247,.92),rgba(34,197,94,.50))"   },
-  { label: "Figma → WordPress",    sub: "20+ Agency Builds",      gradient: "linear-gradient(135deg,rgba(34,197,94,.92),rgba(230,255,230,.88))"  },
-  { label: "WooCommerce Store",    sub: "E-commerce Dubai",       gradient: "linear-gradient(135deg,rgba(255,122,24,.88),rgba(168,85,247,.60))"  },
-  { label: "Custom Plugins",       sub: "Plugin Development",     gradient: "linear-gradient(135deg,rgba(11,11,11,.88),rgba(255,122,24,.48))"    },
-  { label: "Landing Pages",        sub: "UAE · UK · USA Clients", gradient: "linear-gradient(135deg,rgba(247,214,74,.92),rgba(255,122,24,.72))"  },
-  { label: "6s → 1.8s Speed",      sub: "Core Web Vitals",        gradient: "linear-gradient(135deg,rgba(34,197,94,.86),rgba(11,11,11,.75))"     },
+  { label: "Desert Safari Dubai", sub: "Custom Booking Plugin", gradient: "linear-gradient(135deg,rgba(255,122,24,.96),rgba(255,214,74,.82))" },
+  { label: "Embassy of Pakistan", sub: "Government Website", gradient: "linear-gradient(135deg,rgba(168,85,247,.92),rgba(34,197,94,.50))" },
+  { label: "Figma → WordPress", sub: "20+ Agency Builds", gradient: "linear-gradient(135deg,rgba(34,197,94,.92),rgba(230,255,230,.88))" },
+  { label: "WooCommerce Store", sub: "E-commerce Dubai", gradient: "linear-gradient(135deg,rgba(255,122,24,.88),rgba(168,85,247,.60))" },
+  { label: "Custom Plugins", sub: "Plugin Development", gradient: "linear-gradient(135deg,rgba(11,11,11,.88),rgba(255,122,24,.48))" },
+  { label: "Landing Pages", sub: "UAE · UK · USA Clients", gradient: "linear-gradient(135deg,rgba(247,214,74,.92),rgba(255,122,24,.72))" },
+  { label: "6s → 1.8s Speed", sub: "Core Web Vitals", gradient: "linear-gradient(135deg,rgba(34,197,94,.86),rgba(11,11,11,.75))" },
 ];
 
 const pluginLabs = [
@@ -65,29 +65,6 @@ const pluginLabs = [
   },
 ];
 
-const services = [
-  {
-    title: "Elementor Pro Websites",
-    copy: "Pixel-perfect, responsive, editable pages built from Figma, screenshots, or brand direction.",
-    deliverable: "Landing pages, corporate websites, service pages, blogs, templates.",
-  },
-  {
-    title: "WooCommerce Stores",
-    copy: "Online stores with clean product structure, checkout improvements, speed fixes, and conversion-focused layouts.",
-    deliverable: "Product pages, cart, checkout, payment setup, custom fields.",
-  },
-  {
-    title: "Custom WordPress Plugins",
-    copy: "Business-specific tools when normal plugins cannot handle the workflow properly.",
-    deliverable: "Booking systems, dashboards, forms, pricing logic, admin tools.",
-  },
-  {
-    title: "Speed & UX Optimization",
-    copy: "Performance cleanup for slow WordPress sites without destroying design or functionality.",
-    deliverable: "Cache setup, image optimization, plugin audit, Core Web Vitals fixes.",
-  },
-];
-
 const processSteps = [
   ["01", "Understand", "I clarify the client goal, business model, page structure, features, references, and conversion path."],
   ["02", "Plan", "I map the sections, WordPress stack, required plugins, custom logic, responsiveness, and editing needs."],
@@ -104,14 +81,10 @@ const trustSignals = [
 
 const contactServices = ["website", "WooCommerce store", "redesign", "custom plugin"];
 
-/* ─── component ─────────────────────────────────────────────── */
 export default function Home() {
   const gradientRef = useRef<HTMLDivElement>(null);
   const portraitRef = useRef<HTMLDivElement>(null);
-  const mainRef     = useRef<HTMLElement>(null);
-
-  /* ── Contact form state ──────────────────────────────────── */
-  // TODO: Sign up at formspree.io, create a form, paste your form ID below
+  const mainRef = useRef<HTMLElement>(null);
   const FORMSPREE_ID = "YOUR_FORM_ID";
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -119,12 +92,14 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus("sending");
+
     try {
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(formState),
       });
+
       if (res.ok) {
         setFormStatus("success");
         setFormState({ name: "", email: "", message: "" });
@@ -136,44 +111,44 @@ export default function Home() {
     }
   };
 
-  /* ── All GSAP animations in ONE context ─────────────────── */
   useEffect(() => {
     const ctx = gsap.context(() => {
-
-      /* 1 ▸ Hero entrance — stagger in on mount */
       const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
       heroTl
-        .from(".ha-pill",     { y: -20, opacity: 0, duration: 0.55 })
-        .from(".ha-h1",       { y: 48,  opacity: 0, duration: 0.80 }, "-=0.30")
-        .from(".ha-sub",      { y: 28,  opacity: 0, duration: 0.70 }, "-=0.52")
-        .from(".ha-actions",  { y: 20,  opacity: 0, duration: 0.60 }, "-=0.44")
-        .from(".ha-showcase", { y: 36,  opacity: 0, duration: 0.80, scale: 0.98 }, "-=0.48");
+        .from(".ha-pill", { y: -20, opacity: 0, duration: 0.55 })
+        .from(".ha-h1", { y: 48, opacity: 0, duration: 0.80 }, "-=0.30")
+        .from(".ha-sub", { y: 28, opacity: 0, duration: 0.70 }, "-=0.52")
+        .from(".ha-actions", { y: 20, opacity: 0, duration: 0.60 }, "-=0.44")
+        .from(".ha-showcase", { y: 36, opacity: 0, duration: 0.80, scale: 0.98 }, "-=0.48");
 
-      /* 2 ▸ FlowArt — each non-hero section rotates from slight angle on scroll */
       document.querySelectorAll<HTMLElement>(".flow-section:not(.hero):not(.stats-showcase-section) .flow-inner")
         .forEach((inner) => {
-          gsap.fromTo(inner,
+          gsap.fromTo(
+            inner,
             { rotationZ: 4, rotationX: 1.5, opacity: 0.55, transformOrigin: "bottom left" },
             {
-              rotationZ: 0, rotationX: 0, opacity: 1,
+              rotationZ: 0,
+              rotationX: 0,
+              opacity: 1,
               ease: "power2.out",
               scrollTrigger: {
                 trigger: inner.parentElement,
                 start: "top 88%",
-                end:   "top 22%",
+                end: "top 22%",
                 scrub: 0.7,
               },
             }
           );
         });
 
-      /* 3 ▸ About card slides from left */
       gsap.from(".about-card", {
-        x: -40, opacity: 0, duration: 0.9, ease: "power3.out",
+        x: -40,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
         scrollTrigger: { trigger: ".about-card", start: "top 82%" },
       });
 
-      /* 4 ▸ Stats cards reveal one by one on scroll without changing layout */
       const statCards = gsap.utils.toArray<HTMLElement>(".stats-showcase-section .stat");
       if (statCards.length) {
         gsap.set(statCards, {
@@ -216,15 +191,21 @@ export default function Home() {
         });
       }
 
-      /* 5 ▸ Project cards stagger up */
       gsap.from(".project", {
-        y: 52, opacity: 0, duration: 0.70, stagger: 0.09, ease: "power3.out",
+        y: 52,
+        opacity: 0,
+        duration: 0.70,
+        stagger: 0.09,
+        ease: "power3.out",
         scrollTrigger: { trigger: ".project-cards", start: "top 80%" },
       });
 
-      /* 6 ▸ Contact elements */
       gsap.from(".contact-anim", {
-        y: 28, opacity: 0, duration: 0.70, stagger: 0.12, ease: "power3.out",
+        y: 28,
+        opacity: 0,
+        duration: 0.70,
+        stagger: 0.12,
+        ease: "power3.out",
         scrollTrigger: { trigger: "#contact", start: "top 78%" },
       });
 
@@ -234,7 +215,6 @@ export default function Home() {
     return () => ctx.revert();
   }, []);
 
-  /* ── Pointer glow + portrait tilt ───────────────────────── */
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
       const x = (e.clientX / window.innerWidth) * 100;
@@ -243,20 +223,20 @@ export default function Home() {
       gradientRef.current?.style.setProperty("--my", `${y}%`);
 
       if (portraitRef.current) {
-        const r  = portraitRef.current.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width  - 0.5;
-        const py = (e.clientY - r.top)  / r.height - 0.5;
+        const r = portraitRef.current.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
         if (e.clientY < window.innerHeight * 0.9) {
           portraitRef.current.style.setProperty("--ry", `${(px * 8).toFixed(2)}deg`);
           portraitRef.current.style.setProperty("--rx", `${(-py * 8).toFixed(2)}deg`);
         }
       }
     };
+
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
   }, []);
 
-  /* ── IntersectionObserver for .scroll-reveal elements ───── */
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("in")),
@@ -266,12 +246,10 @@ export default function Home() {
     return () => io.disconnect();
   }, []);
 
-  /* ─── JSX ──────────────────────────────────────────────── */
   return (
     <main ref={mainRef}>
       <div className="noise" />
 
-      {/* ── HERO ── */}
       <section className="hero flow-section" id="home">
         <div className="gradient-stage" ref={gradientRef} aria-hidden="true">
           <div className="gblob orange" />
@@ -309,9 +287,7 @@ export default function Home() {
                   <div className="site-body">
                     <h3>{title}</h3>
                     <p>{desc}</p>
-                    {shape === "thumbs"
-                      ? <div className="thumb-row"><span /><span /><span /></div>
-                      : <div className={`site-shape ${shape}`} />}
+                    {shape === "thumbs" ? <div className="thumb-row"><span /><span /><span /></div> : <div className={`site-shape ${shape}`} />}
                   </div>
                 </article>
               ))}
@@ -323,7 +299,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── ABOUT ── */}
       <section className="section grey flow-section stats-showcase-section" id="about">
         <div className="container stats-layout flow-inner">
           <aside className="about-card">
@@ -337,19 +312,14 @@ export default function Home() {
             </div>
             <a href="mailto:adeeliqbalajum@gmail.com" className="about-button">
               <span className="about-button-text">Work with me</span>
-              <span className="mini-avatar">
-                <img src={portraitDataUrl} alt="Adeel" />
-              </span>
+              <span className="mini-avatar"><img src={portraitDataUrl} alt="Adeel" /></span>
             </a>
           </aside>
 
           <div className="stats-grid">
             {stats.map(([value, label, text]) => (
               <div className="stat" key={value as string}>
-                <div className="stat-top">
-                  <strong>{value}</strong>
-                  <span>{label}</span>
-                </div>
+                <div className="stat-top"><strong>{value}</strong><span>{label}</span></div>
                 <p>{text}</p>
               </div>
             ))}
@@ -361,53 +331,36 @@ export default function Home() {
         <ZoomParallax items={parallaxItems} />
       </div>
 
-      {/* ── PROJECTS ── */}
       <section className="section flow-section" id="projects">
         <div className="flow-inner">
-          <div className="projects-head">
-            <div className="eyebrow scroll-reveal">Real work, real clients</div>
-          </div>
-
+          <div className="projects-head"><div className="eyebrow scroll-reveal">Real work, real clients</div></div>
           <TextRevealByWord text="Projects I've built and delivered" />
-
           <div className="container projects-head" style={{ paddingTop: 0 }}>
             <div className="project-board">
               <div className="project-cards">
                 {[
-                  { num:"01",cat:"Dubai Tourism",   title:"Desert Safari Dubai",      slug:"desert-safari-dubai",         desc:"Custom booking plugin with tiered AED pricing, admin approval workflow, and Telr payment integration." },
-                  { num:"02",cat:"Government",       title:"Embassy of Pakistan",       slug:"",                             desc:"Official government website — Elementor + ACF, plus a custom PHP passport application tracking system." },
-                  { num:"03",cat:"Healthcare",       title:"GetCareMD",                 slug:"getcaremd",                    desc:"24/7 telehealth platform with service pages, provider credentials, and conversion-focused booking flow." },
-                  { num:"04",cat:"Legal",            title:"Pacific Valor Law",         slug:"pacific-valor-law",            desc:"VA disability attorney site for overseas veterans — free case review CTA and VA-accredited credentials." },
-                  { num:"05",cat:"Education",        title:"7 Sky Consultant",          slug:"7sky-consultant",              desc:"Study abroad consultancy showcasing a 98% visa success rate and 94% scholarship placement record." },
-                  { num:"06",cat:"Finance",          title:"Seva Wealth",               slug:"seva-wealth",                  desc:"Wealth management site with Calendly integration, philosophy-driven design, and trust-heavy credentials." },
-                ].map(({ num, cat, title, slug, desc }) =>
-                  slug ? (
-                    <Link key={num} href={`/portfolio/${slug}`} className="project project--linked">
-                      <small>{num} — {cat}</small>
-                      <h3>{title}</h3>
-                      <p>{desc}</p>
-                      <span className="project-arrow">View case study →</span>
-                    </Link>
-                  ) : (
-                    <article key={num} className="project">
-                      <small>{num} — {cat}</small>
-                      <h3>{title}</h3>
-                      <p>{desc}</p>
-                    </article>
-                  )
-                )}
+                  { num: "01", cat: "Dubai Tourism", title: "Desert Safari Dubai", slug: "desert-safari-dubai", desc: "Custom booking plugin with tiered AED pricing, admin approval workflow, and Telr payment integration." },
+                  { num: "02", cat: "Government", title: "Embassy of Pakistan", slug: "", desc: "Official government website — Elementor + ACF, plus a custom PHP passport application tracking system." },
+                  { num: "03", cat: "Healthcare", title: "GetCareMD", slug: "getcaremd", desc: "24/7 telehealth platform with service pages, provider credentials, and conversion-focused booking flow." },
+                  { num: "04", cat: "Legal", title: "Pacific Valor Law", slug: "pacific-valor-law", desc: "VA disability attorney site for overseas veterans — free case review CTA and VA-accredited credentials." },
+                  { num: "05", cat: "Education", title: "7 Sky Consultant", slug: "7sky-consultant", desc: "Study abroad consultancy showcasing a 98% visa success rate and 94% scholarship placement record." },
+                  { num: "06", cat: "Finance", title: "Seva Wealth", slug: "seva-wealth", desc: "Wealth management site with Calendly integration, philosophy-driven design, and trust-heavy credentials." },
+                ].map(({ num, cat, title, slug, desc }) => slug ? (
+                  <Link key={num} href={`/portfolio/${slug}`} className="project project--linked">
+                    <small>{num} — {cat}</small><h3>{title}</h3><p>{desc}</p><span className="project-arrow">View case study →</span>
+                  </Link>
+                ) : (
+                  <article key={num} className="project"><small>{num} — {cat}</small><h3>{title}</h3><p>{desc}</p></article>
+                ))}
               </div>
             </div>
-            <div style={{ textAlign:"center", marginTop: 36 }}>
-              <Link href="/portfolio" className="btn btn-dark" style={{ display:"inline-flex" }}>
-                View all 19 projects →
-              </Link>
+            <div style={{ textAlign: "center", marginTop: 36 }}>
+              <Link href="/portfolio" className="btn btn-dark" style={{ display: "inline-flex" }}>View all 19 projects →</Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── PLUGIN LAB ── */}
       <section className="section grey flow-section portfolio-section" id="plugin-lab">
         <div className="container flow-inner">
           <div className="section-head scroll-reveal">
@@ -415,24 +368,17 @@ export default function Home() {
             <h2>Live-style demos that prove functionality</h2>
             <p>These modules show the kind of real WordPress systems I can build for clients, not only visual sections.</p>
           </div>
-
           <div className="lab-grid">
             {pluginLabs.map((item, index) => (
               <article className="lab-card scroll-reveal" key={item.title}>
-                <small>0{index + 1} — {item.tag}</small>
-                <h3>{item.title}</h3>
-                <p>{item.copy}</p>
-                <div className="lab-demo">
-                  <span>{item.demo}</span>
-                  <strong>{item.proves}</strong>
-                </div>
+                <small>0{index + 1} — {item.tag}</small><h3>{item.title}</h3><p>{item.copy}</p>
+                <div className="lab-demo"><span>{item.demo}</span><strong>{item.proves}</strong></div>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── SERVICES ── */}
       <section className="section flow-section portfolio-section" id="services">
         <div className="container flow-inner">
           <div className="section-head scroll-reveal">
@@ -440,12 +386,12 @@ export default function Home() {
             <h2>Services built for serious business websites</h2>
             <p>I help businesses launch fast, responsive, editable WordPress websites with clean design, working functionality, and reliable handover.</p>
           </div>
-
           <ServicesCarousel />
         </div>
       </section>
 
-      {/* ── PROCESS ── */}
+      <Services3DGallery />
+
       <section className="section flow-section portfolio-section" id="process">
         <div className="container flow-inner">
           <div className="section-head scroll-reveal">
@@ -453,20 +399,16 @@ export default function Home() {
             <h2>How I move from idea to polished launch</h2>
             <p>A simple build process helps clients understand what is happening and keeps the project controlled from start to finish.</p>
           </div>
-
           <div className="process-grid">
             {processSteps.map(([num, title, copy]) => (
               <article className="process-card scroll-reveal" key={num}>
-                <span>{num}</span>
-                <h3>{title}</h3>
-                <p>{copy}</p>
+                <span>{num}</span><h3>{title}</h3><p>{copy}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── TESTIMONIALS / TRUST ── */}
       <section className="section grey flow-section portfolio-section" id="trust">
         <div className="container flow-inner">
           <div className="section-head scroll-reveal">
@@ -474,101 +416,45 @@ export default function Home() {
             <h2>Why a client should feel safe hiring me</h2>
             <p>Every signal here is grounded in real project delivery — international clients, editable builds, and technical depth proven through 19 documented case studies.</p>
           </div>
-
           <div className="trust-grid">
             {trustSignals.map(([title, copy]) => (
-              <article className="trust-card scroll-reveal" key={title}>
-                <h3>{title}</h3>
-                <p>{copy}</p>
-              </article>
+              <article className="trust-card scroll-reveal" key={title}><h3>{title}</h3><p>{copy}</p></article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CONTACT ── */}
       <section className="section grey flow-section" id="contact">
         <div className="container projects-head flow-inner">
           <div className="eyebrow contact-anim">Let&apos;s build together</div>
-
           <h2 className="contact-anim contact-h2">
-            Have a WordPress{" "}
-            <span className="contact-rotate">
-              <TextRotate texts={contactServices} interval={2400} />
-            </span>{" "}
-            ready to build?
+            Have a WordPress <span className="contact-rotate"><TextRotate texts={contactServices} interval={2400} /></span> ready to build?
           </h2>
-
           <p className="subline contact-anim" style={{ maxWidth: 520, margin: "16px auto 0" }}>
-            Whether you need a new site, a redesign, a WooCommerce store, or a custom plugin —
-            send a message and I&apos;ll respond within a few hours.
+            Whether you need a new site, a redesign, a WooCommerce store, or a custom plugin — send a message and I&apos;ll respond within a few hours.
           </p>
-
           <form className="contact-form contact-anim" onSubmit={handleSubmit} noValidate>
             <div className="contact-row">
               <div className="contact-field">
                 <label htmlFor="cf-name">Name</label>
-                <input
-                  id="cf-name"
-                  type="text"
-                  className="contact-input"
-                  placeholder="Your name"
-                  value={formState.name}
-                  onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
-                  required
-                />
+                <input id="cf-name" type="text" className="contact-input" placeholder="Your name" value={formState.name} onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))} required />
               </div>
               <div className="contact-field">
                 <label htmlFor="cf-email">Email</label>
-                <input
-                  id="cf-email"
-                  type="email"
-                  className="contact-input"
-                  placeholder="you@example.com"
-                  value={formState.email}
-                  onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
-                  required
-                />
+                <input id="cf-email" type="email" className="contact-input" placeholder="you@example.com" value={formState.email} onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))} required />
               </div>
             </div>
             <div className="contact-field">
               <label htmlFor="cf-message">Message</label>
-              <textarea
-                id="cf-message"
-                className="contact-textarea"
-                placeholder="Tell me about your project — type of site, goals, timeline, budget…"
-                value={formState.message}
-                onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
-                required
-              />
+              <textarea id="cf-message" className="contact-textarea" placeholder="Tell me about your project — type of site, goals, timeline, budget…" value={formState.message} onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))} required />
             </div>
-
-            {formStatus === "success" && (
-              <p className="contact-form-status success">✓ Message sent — I&apos;ll reply within a few hours.</p>
-            )}
+            {formStatus === "success" && <p className="contact-form-status success">✓ Message sent — I&apos;ll reply within a few hours.</p>}
             {formStatus === "error" && (
-              <p className="contact-form-status error">
-                Something went wrong. Email me directly at{" "}
-                <a href="mailto:adeeliqbalajum@gmail.com">adeeliqbalajum@gmail.com</a>
-              </p>
+              <p className="contact-form-status error">Something went wrong. Email me directly at <a href="mailto:adeeliqbalajum@gmail.com">adeeliqbalajum@gmail.com</a></p>
             )}
-
             <div className="contact-actions">
-              <button
-                type="submit"
-                className="btn btn-dark"
-                disabled={formStatus === "sending"}
-              >
-                {formStatus === "sending" ? "Sending…" : "✦ Send message"}
-              </button>
-              <a
-                className="btn btn-ghost"
-                href="https://linkedin.com/in/adeelatwork/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </a>
+              <button type="submit" className="btn btn-dark" disabled={formStatus === "sending"}>{formStatus === "sending" ? "Sending…" : "✦ Send message"}</button>
+              <a className="btn btn-ghost" href="https://linkedin.com/in/adeelatwork/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </div>
           </form>
         </div>
