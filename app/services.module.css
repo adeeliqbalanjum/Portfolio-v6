@@ -3,6 +3,8 @@
   overflow: hidden;
   isolation: isolate;
   width: 100vw;
+  height: 560vh;
+  min-height: 4200px;
   margin-top: 36px;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -19,9 +21,9 @@
   content: "";
   position: absolute;
   left: 50%;
-  top: 52%;
-  width: min(860px, 92vw);
-  height: min(860px, 92vw);
+  top: 34%;
+  width: min(980px, 94vw);
+  height: min(980px, 94vw);
   border-radius: 50%;
   background:
     radial-gradient(circle at 8% 8%, rgba(125, 211, 252, .16), transparent 45%),
@@ -43,6 +45,8 @@
 }
 
 .servicePin {
+  position: sticky;
+  top: 92px;
   width: 100vw;
   height: calc(100vh - 92px);
   min-height: 620px;
@@ -358,12 +362,16 @@
 @media (max-width: 900px) {
   .serviceShell {
     width: auto;
+    height: auto;
+    min-height: 0;
     margin-left: 0;
     transform: none;
     overflow: visible;
   }
 
   .servicePin {
+    position: relative;
+    top: auto;
     width: auto;
     height: auto;
     min-height: auto;
