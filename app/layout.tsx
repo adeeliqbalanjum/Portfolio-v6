@@ -19,6 +19,7 @@ import './scrollbar-fix.css';
 import './home-stat-cards-option-a.css';
 import './portfolio-performance.css';
 import './site-consistency-fixes.css';
+import './portfolio-upgrades.css';
 import { ButtonFillController } from './components/ButtonFillController';
 import { SiteFooter } from './components/SiteFooter';
 import { SiteHeader } from './components/SiteHeader';
@@ -28,14 +29,27 @@ import { HomeHeroOptionBMount } from './components/HomeHeroOptionBMount';
 import { HomeProcessOrbitMount } from './components/HomeProcessOrbitMount';
 import { HomeTestimonialsMount } from './components/HomeTestimonialsMount';
 import { ScrollProgressBar } from './components/ScrollProgressBar';
+import { SeoJsonLd } from './components/SeoJsonLd';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://adeeliqbalanjum.github.io/Portfolio-v6'),
   title: 'Muhammad Adeel Iqbal — WordPress Developer & WooCommerce Specialist',
-  description: 'I build and redesign WordPress & WooCommerce websites for businesses in the UAE, UK, and USA. 3+ years, 50+ projects, Elementor Pro, custom plugins.',
+  description: 'I build editable WordPress, Elementor Pro and WooCommerce websites with custom functionality, performance optimization, QA, and maintenance for clients in UAE, UK, USA and Pakistan.',
+  keywords: ['WordPress Developer', 'Elementor Pro Developer', 'WooCommerce Developer', 'Custom WordPress Plugin', 'Website Speed Optimization', 'Figma to WordPress'],
   openGraph: {
     title: 'Muhammad Adeel Iqbal — WordPress Developer',
-    description: 'Building fast, high-impact WordPress & WooCommerce websites for international clients.',
+    description: 'WordPress, Elementor Pro, WooCommerce, custom features, performance optimization and maintenance.',
     type: 'website',
+    url: 'https://adeeliqbalanjum.github.io/Portfolio-v6',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Muhammad Adeel Iqbal — WordPress Developer',
+    description: 'Editable, fast, client-ready WordPress websites and WooCommerce builds.',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -43,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body>
+        <SeoJsonLd />
         <ButtonFillController />
         <ScrollProgressBar type='bar' color='#070707' strokeSize={2} showPercentage={false} />
         <SiteHeader />

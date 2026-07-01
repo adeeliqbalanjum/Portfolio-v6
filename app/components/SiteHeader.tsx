@@ -1,6 +1,7 @@
-import Link from 'next/link';
+import Link from "next/link";
+import { cvUrl } from "../site-config";
 
-const portraitDataUrl = 'https://avatars.githubusercontent.com/u/178131381?v=4';
+const portraitDataUrl = "https://avatars.githubusercontent.com/u/178131381?v=4";
 
 export function SiteHeader() {
   return (
@@ -9,9 +10,10 @@ export function SiteHeader() {
         <img src={portraitDataUrl} alt="Adeel" />
       </Link>
       <Link href="/">Home</Link>
-      <Link href="/portfolio">Portfolio</Link>
-      <Link href="/#about">About</Link>
-      <Link href="/#projects">Projects</Link>
+      <Link href="/#services">Services</Link>
+      <Link href="/portfolio">Work</Link>
+      <Link href="/#proof">Proof</Link>
+      <a href={cvUrl}>CV</a>
       <Link href="/#contact" className="nav-cta">Hire Me</Link>
     </nav>
   );

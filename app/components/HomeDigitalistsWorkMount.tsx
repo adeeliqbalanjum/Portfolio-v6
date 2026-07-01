@@ -5,8 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
-
-const basePath = process.env.NODE_ENV === "production" ? "/Portfolio-v6" : "";
+import { withBasePath } from "../site-config";
 
 const cases = [
   {
@@ -15,8 +14,8 @@ const cases = [
     client: "Griffin IT",
     services: "Screen design, WordPress programming, responsive build",
     tone: "blue",
-    image: `${basePath}/work-images/griffin-it.webp`,
-    href: "",
+    image: withBasePath("/work-images/griffin-it.webp"),
+    href: "/portfolio/griffin-it",
   },
   {
     code: "CS 682",
@@ -24,8 +23,8 @@ const cases = [
     client: "Kay Kay Travels",
     services: "Travel website, responsive UI, service-led structure",
     tone: "green",
-    image: `${basePath}/work-images/kay-kay.webp`,
-    href: "",
+    image: withBasePath("/work-images/kay-kay.webp"),
+    href: "/portfolio/kk-travels-and-tours",
   },
   {
     code: "CS 566",
@@ -33,8 +32,8 @@ const cases = [
     client: "Book My Holidays",
     services: "Travel landing page, form UI, responsive design",
     tone: "blue",
-    image: `${basePath}/work-images/book-my-holidays.webp`,
-    href: "",
+    image: withBasePath("/work-images/book-my-holidays.webp"),
+    href: "/portfolio/bookmyholidays-uk",
   },
   {
     code: "CS 704",
@@ -42,8 +41,8 @@ const cases = [
     client: "Griffin Resources",
     services: "Business website, brand UI, mobile layout",
     tone: "purple",
-    image: `${basePath}/work-images/griffin-resources.webp`,
-    href: "",
+    image: withBasePath("/work-images/griffin-resources.webp"),
+    href: "/portfolio/griffin-resources",
   },
   {
     code: "CS 738",
@@ -51,8 +50,8 @@ const cases = [
     client: "ATDI",
     services: "Smart tech website, modern UI, conversion sections",
     tone: "gold",
-    image: `${basePath}/work-images/atdi.webp`,
-    href: "",
+    image: withBasePath("/work-images/atdi.webp"),
+    href: "/portfolio/artisan-technologies",
   },
   {
     code: "CS 741",
@@ -60,8 +59,8 @@ const cases = [
     client: "FastDocNow",
     services: "Healthcare WordPress, search UX, mobile responsive",
     tone: "blue",
-    image: `${basePath}/work-images/fastdocnow.webp`,
-    href: "",
+    image: withBasePath("/work-images/fastdocnow.webp"),
+    href: "/portfolio/fastdocnow",
   },
 ];
 
@@ -72,33 +71,13 @@ function HomeDigitalistsWorkSection() {
   return (
     <div className={`home-digitalists-work digitalists-active-tone-${activeTone}`}>
       <div className="home-digitalists-topbar">
-        <motion.div
-          className="home-digitalists-hand"
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.35 }}
-          transition={{ duration: 0.58 }}
-        >
+        <motion.div className="home-digitalists-hand" initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.35 }} transition={{ duration: 0.58 }}>
           Case studies that actually happened
         </motion.div>
-
-        <motion.div
-          className="home-digitalists-center"
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.35 }}
-          transition={{ duration: 0.58, delay: 0.08 }}
-        >
-          <span>Creative WordPress solutions</span>
-          <i />
+        <motion.div className="home-digitalists-center" initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.35 }} transition={{ duration: 0.58, delay: 0.08 }}>
+          <span>Creative WordPress solutions</span><i />
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.35 }}
-          transition={{ duration: 0.58, delay: 0.14 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.35 }} transition={{ duration: 0.58, delay: 0.14 }}>
           <Link href="/portfolio" className="home-digitalists-all">All cases <b /></Link>
         </motion.div>
       </div>
@@ -106,8 +85,8 @@ function HomeDigitalistsWorkSection() {
       <div className="home-digitalists-list">
         {cases.map((item, index) => {
           const active = hoveredIndex === index;
-          const rowContent = (
-            <>
+          return (
+            <Link key={item.title} href={item.href} className={`home-digitalists-row ${active ? "is-active" : ""}`} onMouseEnter={() => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} onFocus={() => setHoveredIndex(index)} onBlur={() => setHoveredIndex(null)}>
               <span className="home-digitalists-code">{item.code}</span>
               <h3>{item.title}</h3>
               <strong>{item.client}</strong>
@@ -115,38 +94,9 @@ function HomeDigitalistsWorkSection() {
               <span className="home-digitalists-icon"><ArrowUpRight size={24} /></span>
               <span className="home-digitalists-preview" aria-hidden="true">
                 <img src={item.image} alt="" />
-                <span className="home-digitalists-caption">
-                  <em>{item.code}</em>
-                  <b>{item.client}</b>
-                </span>
+                <span className="home-digitalists-caption"><em>{item.code}</em><b>{item.client}</b></span>
               </span>
-            </>
-          );
-
-          return item.href ? (
-            <Link
-              key={item.title}
-              href={item.href}
-              className={`home-digitalists-row ${active ? "is-active" : ""}`}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              onFocus={() => setHoveredIndex(index)}
-              onBlur={() => setHoveredIndex(null)}
-            >
-              {rowContent}
             </Link>
-          ) : (
-            <article
-              key={item.title}
-              className={`home-digitalists-row ${active ? "is-active" : ""}`}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              onFocus={() => setHoveredIndex(index)}
-              onBlur={() => setHoveredIndex(null)}
-              tabIndex={0}
-            >
-              {rowContent}
-            </article>
           );
         })}
       </div>
@@ -160,16 +110,11 @@ export function HomeDigitalistsWorkMount() {
   React.useEffect(() => {
     const projects = document.getElementById("projects");
     if (!projects) return;
-
     projects.classList.add("home-digitalists-mounted");
     setTarget(projects);
-
-    return () => {
-      projects.classList.remove("home-digitalists-mounted");
-    };
+    return () => projects.classList.remove("home-digitalists-mounted");
   }, []);
 
   if (!target) return null;
-
   return createPortal(<HomeDigitalistsWorkSection />, target);
 }
